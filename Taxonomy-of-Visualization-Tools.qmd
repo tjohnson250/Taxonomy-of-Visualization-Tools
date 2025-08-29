@@ -2,6 +2,7 @@
 title: "Taxonomy-of-Visualization-Tools"
 format: revealjs
 editor: visual
+output-dir: docs
 ---
 
 ## Quarto
