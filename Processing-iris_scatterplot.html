@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Dataset Scatterplot</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        #sketch-container {
+            display: flex;
+            justify-content: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        #info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #info h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        #point-details {
+            font-family: monospace;
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="sketch-container"></div>
+    <div id="info">
+        <h3>Instructions</h3>
+        <p>Move your mouse over the data points to see details. Click on any point to display its information below.</p>
+        <div id="point-details">Click on a data point to see its details here...</div>
+    </div>
+
+    <script>
+        // Iris data structure
+        class IrisData {
+            constructor(sepalLength, sepalWidth, petalLength, petalWidth, species) {
+                this.sepalLength = sepalLength;
+                this.sepalWidth = sepalWidth;
+                this.petalLength = petalLength;
+                this.petalWidth = petalWidth;
+                this.species = species;
+            }
+        }
+
+        // Global variables
+        let irisDataset = [];
+        let margin = 60;
+        let plotWidth, plotHeight;
+        let minX = 4.0, maxX = 8.0;  // Sepal length range
+        let minY = 2.0, maxY = 4.5;  // Sepal width range
+        let hoveredPoint = null;
+
+        function setup() {
+            let canvas = createCanvas(400, 300);
+            canvas.parent('sketch-container');
+            
+            plotWidth = width - 2 * margin;
+            plotHeight = height - 2 * margin;
+            
+            // Initialize and populate the iris dataset
+            initializeIrisData();
+            
+            // Draw the scatterplot
+            drawScatterplot();
+        }
+
+        function draw() {
+            // Redraw only if there's interaction
+            if (hoveredPoint !== null) {
+                drawScatterplot();
+                highlightHoveredPoint();
+            }
+        }
+
+        function initializeIrisData() {
+            irisDataset = [];
+            
+            // Sample of the famous iris dataset
+            // Iris setosa
+            let setosaData = [
+                [5.1, 3.5, 1.4, 0.2], [4.9, 3.0, 1.4, 0.2], [4.7, 3.2, 1.3, 0.2],
+                [4.6, 3.1, 1.5, 0.2], [5.0, 3.6, 1.4, 0.2], [5.4, 3.9, 1.7, 0.4],
+                [4.6, 3.4, 1.4, 0.3], [5.0, 3.4, 1.5, 0.2], [4.4, 2.9, 1.4, 0.2],
+                [4.9, 3.1, 1.5, 0.1], [5.4, 3.7, 1.5, 0.2], [4.8, 3.4, 1.6, 0.2],
+                [4.8, 3.0, 1.4, 0.1], [4.3, 3.0, 1.1, 0.1], [5.8, 4.0, 1.2, 0.2],
+                [5.7, 4.4, 1.5, 0.4], [5.4, 3.9, 1.3, 0.4], [5.1, 3.5, 1.4, 0.3],
+                [5.7, 3.8, 1.7, 0.3], [5.1, 3.8, 1.5, 0.3], [5.4, 3.4, 1.7, 0.2],
+                [5.1, 3.7, 1.5, 0.4], [4.6, 3.6, 1.0, 0.2], [5.1, 3.3, 1.7, 0.5],
+                [4.8, 3.4, 1.9, 0.2], [5.0, 3.0, 1.6, 0.2], [5.0, 3.4, 1.6, 0.4],
+                [5.2, 3.5, 1.5, 0.2], [5.2, 3.4, 1.4, 0.2], [4.7, 3.2, 1.6, 0.2]
+            ];
+            
+            // Iris versicolor
+            let versicolorData = [
+                [7.0, 3.2, 4.7, 1.4], [6.4, 3.2, 4.5, 1.5], [6.9, 3.1, 4.9, 1.5],
+                [5.5, 2.3, 4.0, 1.3], [6.5, 2.8, 4.6, 1.5], [5.7, 2.8, 4.5, 1.3],
+                [6.3, 3.3, 4.7, 1.6], [4.9, 2.4, 3.3, 1.0], [6.6, 2.9, 4.6, 1.3],
+                [5.2, 2.7, 3.9, 1.4], [5.0, 2.0, 3.5, 1.0], [5.9, 3.0, 4.2, 1.5],
+                [6.0, 2.2, 4.0, 1.0], [6.1, 2.9, 4.7, 1.4], [5.6, 2.9, 3.6, 1.3],
+                [6.7, 3.1, 4.4, 1.4], [5.6, 3.0, 4.5, 1.5], [5.8, 2.7, 4.1, 1.0],
+                [6.2, 2.2, 4.5, 1.5], [5.6, 2.5, 3.9, 1.1], [5.9, 3.2, 4.8, 1.8],
+                [6.1, 2.8, 4.0, 1.3], [6.3, 2.5, 4.9, 1.5], [6.1, 2.8, 4.7, 1.2],
+                [6.4, 2.9, 4.3, 1.3], [6.6, 3.0, 4.4, 1.4], [6.8, 2.8, 4.8, 1.4],
+                [6.7, 3.0, 5.0, 1.7], [6.0, 2.9, 4.5, 1.5], [5.7, 2.6, 3.5, 1.0]
+            ];
+            
+            // Iris virginica
+            let virginicaData = [
+                [6.3, 3.3, 6.0, 2.5], [5.8, 2.7, 5.1, 1.9], [7.1, 3.0, 5.9, 2.1],
+                [6.3, 2.9, 5.6, 1.8], [6.5, 3.0, 5.8, 2.2], [7.6, 3.0, 6.6, 2.1],
+                [4.9, 2.5, 4.5, 1.7], [7.3, 2.9, 6.3, 1.8], [6.7, 2.5, 5.8, 1.8],
+                [7.2, 3.6, 6.1, 2.5], [6.5, 3.2, 5.1, 2.0], [6.4, 2.7, 5.3, 1.9],
+                [6.8, 3.0, 5.5, 2.1], [5.7, 2.5, 5.0, 2.0], [5.8, 2.8, 5.1, 2.4],
+                [6.4, 3.2, 5.3, 2.3], [6.5, 3.0, 5.5, 1.8], [7.7, 3.8, 6.7, 2.2],
+                [7.7, 2.6, 6.9, 2.3], [6.0, 2.2, 5.0, 1.5], [6.9, 3.2, 5.7, 2.3],
+                [5.6, 2.8, 4.9, 2.0], [7.7, 2.8, 6.7, 2.0], [6.3, 2.7, 4.9, 1.8],
+                [6.7, 3.3, 5.7, 2.1], [7.2, 3.2, 6.0, 1.8], [6.2, 2.8, 4.8, 1.8],
+                [6.1, 3.0, 4.9, 1.8], [6.4, 2.8, 5.6, 2.1], [7.2, 3.0, 5.8, 1.6]
+            ];
+            
+            // Add setosa data
+            for (let i = 0; i < setosaData.length; i++) {
+                irisDataset.push(new IrisData(setosaData[i][0], setosaData[i][1], 
+                                            setosaData[i][2], setosaData[i][3], "setosa"));
+            }
+            
+            // Add versicolor data
+            for (let i = 0; i < versicolorData.length; i++) {
+                irisDataset.push(new IrisData(versicolorData[i][0], versicolorData[i][1], 
+                                            versicolorData[i][2], versicolorData[i][3], "versicolor"));
+            }
+            
+            // Add virginica data
+            for (let i = 0; i < virginicaData.length; i++) {
+                irisDataset.push(new IrisData(virginicaData[i][0], virginicaData[i][1], 
+                                            virginicaData[i][2], virginicaData[i][3], "virginica"));
+            }
+        }
+
+        function drawScatterplot() {
+            background(255);
+            
+            // Draw axes
+            stroke(0);
+            strokeWeight(2);
+            
+            // X-axis
+            line(margin, height - margin, width - margin, height - margin);
+            // Y-axis
+            line(margin, margin, margin, height - margin);
+            
+            // Draw axis labels
+            fill(0);
+            textAlign(CENTER);
+            textSize(14);
+            text("Sepal Length (cm)", width/2, height - 20);
+            
+            push();
+            translate(20, height/2);
+            rotate(-PI/2);
+            text("Sepal Width (cm)", 0, 0);
+            pop();
+            
+            // Draw title
+            textAlign(CENTER);
+            textSize(18);
+            text("Iris Dataset: Sepal Length vs Sepal Width", width/2, 30);
+            
+            // Draw tick marks and labels
+            textAlign(CENTER);
+            textSize(10);
+            
+            // X-axis ticks
+            for (let x = minX; x <= maxX; x += 0.5) {
+                let screenX = map(x, minX, maxX, margin, width - margin);
+                line(screenX, height - margin, screenX, height - margin + 5);
+                text(x.toFixed(1), screenX, height - margin + 18);
+            }
+            
+            // Y-axis ticks
+            textAlign(RIGHT);
+            for (let y = minY; y <= maxY; y += 0.5) {
+                let screenY = map(y, minY, maxY, height - margin, margin);
+                line(margin - 5, screenY, margin, screenY);
+                text(y.toFixed(1), margin - 10, screenY + 4);
+            }
+            
+            // Plot data points
+            strokeWeight(1);
+            for (let i = 0; i < irisDataset.length; i++) {
+                let iris = irisDataset[i];
+                let x = map(iris.sepalLength, minX, maxX, margin, width - margin);
+                let y = map(iris.sepalWidth, minY, maxY, height - margin, margin);
+                
+                // Set color based on species
+                if (iris.species === "setosa") {
+                    fill(255, 100, 100);  // Red
+                    stroke(200, 50, 50);
+                } else if (iris.species === "versicolor") {
+                    fill(100, 255, 100);  // Green
+                    stroke(50, 200, 50);
+                } else { // virginica
+                    fill(100, 100, 255);  // Blue
+                    stroke(50, 50, 200);
+                }
+                
+                ellipse(x, y, 8, 8);
+            }
+            
+            // Draw legend
+            drawLegend();
+        }
+
+        function drawLegend() {
+            let legendX = width - 150;
+            let legendY = 60;
+            
+            // Legend background
+            fill(255, 255, 255, 200);
+            stroke(0);
+            rect(legendX - 10, legendY - 10, 130, 80);
+            
+            // Legend title
+            fill(0);
+            textAlign(LEFT);
+            textSize(12);
+            text("Species:", legendX, legendY);
+            
+            // Legend items
+            let species = ["setosa", "versicolor", "virginica"];
+            let colors = [color(255, 100, 100), color(100, 255, 100), color(100, 100, 255)];
+            
+            for (let i = 0; i < species.length; i++) {
+                fill(colors[i]);
+                stroke(red(colors[i]) * 0.8, green(colors[i]) * 0.8, blue(colors[i]) * 0.8);
+                ellipse(legendX + 10, legendY + 20 + i * 20, 8, 8);
+                
+                fill(0);
+                text(species[i], legendX + 20, legendY + 25 + i * 20);
+            }
+        }
+
+        function highlightHoveredPoint() {
+            if (hoveredPoint !== null) {
+                let iris = irisDataset[hoveredPoint];
+                let x = map(iris.sepalLength, minX, maxX, margin, width - margin);
+                let y = map(iris.sepalWidth, minY, maxY, height - margin, margin);
+                
+                // Draw highlight circle
+                fill(255, 255, 0, 100);
+                stroke(255, 255, 0);
+                strokeWeight(2);
+                ellipse(x, y, 15, 15);
+            }
+        }
+
+        function mouseMoved() {
+            let foundPoint = null;
+            
+            // Check if mouse is over any data point
+            for (let i = 0; i < irisDataset.length; i++) {
+                let iris = irisDataset[i];
+                let x = map(iris.sepalLength, minX, maxX, margin, width - margin);
+                let y = map(iris.sepalWidth, minY, maxY, height - margin, margin);
+                
+                if (dist(mouseX, mouseY, x, y) < 10) {
+                    foundPoint = i;
+                    break;
+                }
+            }
+            
+            if (foundPoint !== hoveredPoint) {
+                hoveredPoint = foundPoint;
+                drawScatterplot();
+                if (hoveredPoint !== null) {
+                    highlightHoveredPoint();
+                }
+            }
+        }
+
+        function mousePressed() {
+            // Display details when clicking on a point
+            for (let i = 0; i < irisDataset.length; i++) {
+                let iris = irisDataset[i];
+                let x = map(iris.sepalLength, minX, maxX, margin, width - margin);
+                let y = map(iris.sepalWidth, minY, maxY, height - margin, margin);
+                
+                if (dist(mouseX, mouseY, x, y) < 10) {
+                    let details = `Species: ${iris.species}<br>` +
+                                 `Sepal Length: ${iris.sepalLength} cm<br>` +
+                                 `Sepal Width: ${iris.sepalWidth} cm<br>` +
+                                 `Petal Length: ${iris.petalLength} cm<br>` +
+                                 `Petal Width: ${iris.petalWidth} cm`;
+                    
+                    document.getElementById('point-details').innerHTML = details;
+                    break;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
