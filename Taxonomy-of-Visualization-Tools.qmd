@@ -1,13 +1,201 @@
 ---
-title: "Taxonomy-of-Visualization-Tools"
+title: "Taxonomy of Visualization Tools"
+author: "Todd R. Johnson"
 format: revealjs
+html-math-method: mathjax
 editor: visual
-output-dir: docs
 ---
 
-## Quarto
+```{r}
+library(reticulate)
+py_require("altair")
+alt = import("altair")
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+py_require("vega_datasets")
+vd = import("vega_datasets")
+ 
+```
+
+Looks like it is better to author the processing example in jupyter notebook and then include it in this document while embedding the code as follows in the Embedding Code part of this page: https://quarto.org/docs/authoring/notebook-embed.html with {{< embed penguins.ipynb#species-counts echo=true >}}
+
+## Embed html iframe
+
+```{=html}
+<iframe width="780" height="500" src="./Processing-iris_scatterplot.html" title="Quarto Documentation"></iframe>
+```
+
+{{./Processing-iris_scatterplot.html}}
+
+## Graphics API: Processing
+
+![](./Processing-iris_scatterplot.html){width="100%" height="600px"}
+
+## Grammar of Graphics
+
+![](https://github.com/QCBSRworkshops/workshop03/blob/main/pres-en/images/ggplot-grammar-of-graphics-stack-1.png?raw=true)
+
+## Altair
+
+```{python}
+#| output-location: column
+#| results: hold
+#| echo: true
+#| title: Iowa Electricity
+import altair as alt
+from vega_datasets import data
+source = data.iowa_electricity()
+alt.Chart(source).mark_area(opacity=0.3).encode(
+  x="year:T",
+  y=alt.Y("net_generation:Q").stack(None),
+  color="source:N"
+)
+```
+
+## Data
+
+Graphics start with data
+
+```{r}
+#| echo: true
+#| results: hold
+# Load required libraries and data
+library(ggplot2)
+library(dplyr)
+library(openxlsx)
+library(flextable)
+
+# Load data from an Excel spreadsheet
+data <- read.xlsx("./healthcare cost data.xlsx")
+
+# View the data
+flextable(head(data))
+
+
+```
+
+## Aesthetics
+
+## Mapping
+
+How to map *data* onto *aesthetic* attributes of *geometric* objects
+
+```{r}
+#| echo: true
+#| results: hold
+ggplot(data, aes(x = Patient.Count, y = Total.Cost))
+```
+
+## Layers
+
+-   A graph is made of one or more layers
+-   Each layer has three parts:
+    -   *Geometry* determines *how* data are displayed (points, lines, etc.)
+    -   *Statistical transformations* affect *what* is displayed
+
+## Geometries
+
+Describe geometries
+
+## Geometries: Point {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_point()
+```
+
+## Geometries: Point, colored by Disease {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_point(aes(color = Disease))
+```
+
+## Geometries: Line, colored by Disease {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_line(aes(color = Disease))
+```
+
+## Geometries: Line + Point {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2-3"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_line(aes(color = Disease)) +
+  geom_point(aes(color = Disease))
+```
+
+## Scales {auto-animate="true"}
+
+Scales map data values to aesthetic values. Here we change the default color scale used for Disease
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "4"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_line(aes(color = Disease)) +
+  geom_point(aes(color = Disease)) +
+  scale_color_viridis_d()
+```
+
+## Facets {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2-3"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_line(aes(color = Disease)) +
+  facet_wrap(~ Disease) 
+```
+
+## Facets (without color coding) {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2-4"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_line() +
+  facet_wrap(~ Disease) 
+```
+
+## Statistics {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2-4"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_point(aes(color=Disease)) +
+  geom_line(aes(color=Disease)) +
+  stat_summary(geom="line", fun="mean")
+```
+
+## Coordinates
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "4"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_point(aes(color=Disease)) +
+  geom_line(aes(color=Disease)) +
+  stat_summary(geom="line", fun="mean")
+```
 
 ## Bullets
 
@@ -18,7 +206,7 @@ When you click the **Render** button a document will be generated that includes:
 
 ## Code
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. $x_1 = 10$ You can embed code like this:
 
 ```{r}
 1 + 1

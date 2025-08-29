@@ -1,0 +1,142 @@
+[
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#embed-html-iframe",
+    "href": "Taxonomy-of-Visualization-Tools.html#embed-html-iframe",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Embed html iframe",
+    "text": "Embed html iframe\n\n{{./Processing-iris_scatterplot.html}}"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#graphics-api-processing",
+    "href": "Taxonomy-of-Visualization-Tools.html#graphics-api-processing",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Graphics API: Processing",
+    "text": "Graphics API: Processing"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#grammar-of-graphics",
+    "href": "Taxonomy-of-Visualization-Tools.html#grammar-of-graphics",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics",
+    "text": "Grammar of Graphics"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#altair",
+    "href": "Taxonomy-of-Visualization-Tools.html#altair",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Altair",
+    "text": "Altair\n\n\nimport altair as alt\nfrom vega_datasets import data\nsource = data.iowa_electricity()\nalt.Chart(source).mark_area(opacity=0.3).encode(\n  x=\"year:T\",\n  y=alt.Y(\"net_generation:Q\").stack(None),\n  color=\"source:N\"\n)"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#data",
+    "href": "Taxonomy-of-Visualization-Tools.html#data",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Data",
+    "text": "Data\nGraphics start with data\n\n# Load required libraries and data\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(openxlsx)\nlibrary(flextable)\n\n# Load data from an Excel spreadsheet\ndata &lt;- read.xlsx(\"./healthcare cost data.xlsx\")\n\n# View the data\nflextable(head(data))\n\nPatient.CountAgeDiseaseInsurer.CostPatient.%.of.CostPatient.CostPer.Patient.CostTotal.Cost1,4051Acid Reflux3,901,661.80.1685064790,691.763,339.7534,692,353.53042Acid Reflux858,277.70.1709969177,035.323,405.6351,035,313.01423Acid Reflux420,850.90.167017284,382.723,557.983505,233.71074Acid Reflux307,946.40.167047961,758.393,455.185369,704.8985Acid Reflux392,417.40.147309967,793.614,696.030460,211.0936Acid Reflux273,932.50.165479954,319.023,529.586328,251.5"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#aesthetics",
+    "href": "Taxonomy-of-Visualization-Tools.html#aesthetics",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Aesthetics",
+    "text": "Aesthetics"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#mapping",
+    "href": "Taxonomy-of-Visualization-Tools.html#mapping",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Mapping",
+    "text": "Mapping\nHow to map data onto aesthetic attributes of geometric objects\n\nggplot(data, aes(x = Patient.Count, y = Total.Cost))"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#layers",
+    "href": "Taxonomy-of-Visualization-Tools.html#layers",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Layers",
+    "text": "Layers\n\nA graph is made of one or more layers\nEach layer has three parts:\n\nGeometry determines how data are displayed (points, lines, etc.)\nStatistical transformations affect what is displayed"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#geometries",
+    "href": "Taxonomy-of-Visualization-Tools.html#geometries",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Geometries",
+    "text": "Geometries\nDescribe geometries"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#geometries-point",
+    "href": "Taxonomy-of-Visualization-Tools.html#geometries-point",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Geometries: Point",
+    "text": "Geometries: Point\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point()"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#geometries-point-colored-by-disease",
+    "href": "Taxonomy-of-Visualization-Tools.html#geometries-point-colored-by-disease",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Geometries: Point, colored by Disease",
+    "text": "Geometries: Point, colored by Disease\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point(aes(color = Disease))"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#geometries-line-colored-by-disease",
+    "href": "Taxonomy-of-Visualization-Tools.html#geometries-line-colored-by-disease",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Geometries: Line, colored by Disease",
+    "text": "Geometries: Line, colored by Disease\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease))"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#geometries-line-point",
+    "href": "Taxonomy-of-Visualization-Tools.html#geometries-line-point",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Geometries: Line + Point",
+    "text": "Geometries: Line + Point\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease)) +\n  geom_point(aes(color = Disease))"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#scales",
+    "href": "Taxonomy-of-Visualization-Tools.html#scales",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Scales",
+    "text": "Scales\nScales map data values to aesthetic values. Here we change the default color scale used for Disease\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease)) +\n  geom_point(aes(color = Disease)) +\n  scale_color_viridis_d()"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#facets",
+    "href": "Taxonomy-of-Visualization-Tools.html#facets",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Facets",
+    "text": "Facets\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease)) +\n  facet_wrap(~ Disease)"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#facets-without-color-coding",
+    "href": "Taxonomy-of-Visualization-Tools.html#facets-without-color-coding",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Facets (without color coding)",
+    "text": "Facets (without color coding)\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line() +\n  facet_wrap(~ Disease)"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#statistics",
+    "href": "Taxonomy-of-Visualization-Tools.html#statistics",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Statistics",
+    "text": "Statistics\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point(aes(color=Disease)) +\n  geom_line(aes(color=Disease)) +\n  stat_summary(geom=\"line\", fun=\"mean\")"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#coordinates",
+    "href": "Taxonomy-of-Visualization-Tools.html#coordinates",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Coordinates",
+    "text": "Coordinates\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point(aes(color=Disease)) +\n  geom_line(aes(color=Disease)) +\n  stat_summary(geom=\"line\", fun=\"mean\")"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#bullets",
+    "href": "Taxonomy-of-Visualization-Tools.html#bullets",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Bullets",
+    "text": "Bullets\nWhen you click the Render button a document will be generated that includes:\n\nContent authored with markdown\nOutput from executable code"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#code",
+    "href": "Taxonomy-of-Visualization-Tools.html#code",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Code",
+    "text": "Code\nWhen you click the Render button a presentation will be generated that includes both content and the output of embedded code. \\(x_1 = 10\\) You can embed code like this:\n\n\n[1] 2"
+  }
+]
