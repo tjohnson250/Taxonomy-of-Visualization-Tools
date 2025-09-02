@@ -3,14 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iris Dataset Scatterplot</title>
+    <title>CSV Data Scatterplot</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
         body {
             margin: 0;
             padding: 20px;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .upload-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .controls {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+        .controls.visible {
+            display: block;
         }
         #sketch-container {
             display: flex;
@@ -19,15 +42,15 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             padding: 20px;
+            margin-bottom: 20px;
         }
-        #info {
-            margin-top: 20px;
-            padding: 15px;
+        .info {
             background-color: white;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        #info h3 {
+        .info h3 {
             margin-top: 0;
             color: #333;
         }
@@ -39,121 +62,365 @@
             margin-top: 10px;
             min-height: 20px;
         }
+        .file-input {
+            margin-bottom: 15px;
+        }
+        .file-input input[type="file"] {
+            padding: 8px;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+        select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .axis-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .error {
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .data-summary {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
-    <div id="sketch-container"></div>
-    <div id="info">
-        <h3>Instructions</h3>
-        <p>Move your mouse over the data points to see details. Click on any point to display its information below.</p>
-        <div id="point-details">Click on a data point to see its details here...</div>
+    <div class="container">
+        <div class="upload-section">
+            <h2>CSV Data Scatterplot Visualizer</h2>
+            <p>Upload a CSV file to create an interactive scatterplot. The tool will automatically detect numerical and categorical fields.</p>
+            
+            <div class="file-input">
+                <label for="csvFile">Choose CSV file:</label>
+                <input type="file" id="csvFile" accept=".csv" />
+            </div>
+            
+            <div id="load-sample">
+                <button onclick="loadSampleData()" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    Load Sample Iris Dataset
+                </button>
+            </div>
+            
+            <div id="data-info"></div>
+        </div>
+
+        <div class="controls" id="controls">
+            <h3>Visualization Controls</h3>
+            <div class="axis-controls">
+                <div>
+                    <label for="xAxis">X-Axis (Numerical):</label>
+                    <select id="xAxis"></select>
+                </div>
+                <div>
+                    <label for="yAxis">Y-Axis (Numerical):</label>
+                    <select id="yAxis"></select>
+                </div>
+                <div>
+                    <label for="colorBy">Color by (Categorical):</label>
+                    <select id="colorBy">
+                        <option value="">No grouping</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="updatePlot()" style="padding: 8px 16px; background-color: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Update Plot
+            </button>
+        </div>
+
+        <div id="sketch-container"></div>
+
+        <div class="info">
+            <h3>Instructions</h3>
+            <p>1. Upload a CSV file or use the sample data</p>
+            <p>2. Select which numerical columns to plot on X and Y axes</p>
+            <p>3. Optionally choose a categorical column for color grouping</p>
+            <p>4. Move your mouse over data points to see details, click to display information below</p>
+            <div id="point-details">Upload data and create a plot to see point details here...</div>
+        </div>
     </div>
 
     <script>
-        // Iris data structure
-        class IrisData {
-            constructor(sepalLength, sepalWidth, petalLength, petalWidth, species) {
-                this.sepalLength = sepalLength;
-                this.sepalWidth = sepalWidth;
-                this.petalLength = petalLength;
-                this.petalWidth = petalWidth;
-                this.species = species;
-            }
-        }
-
         // Global variables
-        let irisDataset = [];
+        let dataset = [];
+        let numericalColumns = [];
+        let categoricalColumns = [];
+        let currentXCol = '';
+        let currentYCol = '';
+        let currentColorCol = '';
+        let plotReady = false;
+        let hoveredPoint = null;
         let margin = 60;
         let plotWidth, plotHeight;
-        let minX = 4.0, maxX = 8.0;  // Sepal length range
-        let minY = 2.0, maxY = 4.5;  // Sepal width range
-        let hoveredPoint = null;
+        let xRange = {min: 0, max: 1};
+        let yRange = {min: 0, max: 1};
+        let colorPalette = [];
+        let uniqueCategories = [];
 
         function setup() {
-            let canvas = createCanvas(400, 300);
+            let canvas = createCanvas(800, 600);
             canvas.parent('sketch-container');
             
             plotWidth = width - 2 * margin;
             plotHeight = height - 2 * margin;
             
-            // Initialize and populate the iris dataset
-            initializeIrisData();
+            // Generate color palette
+            generateColorPalette();
             
-            // Draw the scatterplot
-            drawScatterplot();
+            // Show initial message
+            showInitialMessage();
+            
+            // Set up file input handler
+            document.getElementById('csvFile').addEventListener('change', handleFileUpload);
         }
 
         function draw() {
-            // Redraw only if there's interaction
-            if (hoveredPoint !== null) {
+            if (plotReady) {
                 drawScatterplot();
-                highlightHoveredPoint();
+                if (hoveredPoint !== null) {
+                    highlightHoveredPoint();
+                }
             }
         }
 
-        function initializeIrisData() {
-            irisDataset = [];
-            
-            // Sample of the famous iris dataset
-            // Iris setosa
-            let setosaData = [
-                [5.1, 3.5, 1.4, 0.2], [4.9, 3.0, 1.4, 0.2], [4.7, 3.2, 1.3, 0.2],
-                [4.6, 3.1, 1.5, 0.2], [5.0, 3.6, 1.4, 0.2], [5.4, 3.9, 1.7, 0.4],
-                [4.6, 3.4, 1.4, 0.3], [5.0, 3.4, 1.5, 0.2], [4.4, 2.9, 1.4, 0.2],
-                [4.9, 3.1, 1.5, 0.1], [5.4, 3.7, 1.5, 0.2], [4.8, 3.4, 1.6, 0.2],
-                [4.8, 3.0, 1.4, 0.1], [4.3, 3.0, 1.1, 0.1], [5.8, 4.0, 1.2, 0.2],
-                [5.7, 4.4, 1.5, 0.4], [5.4, 3.9, 1.3, 0.4], [5.1, 3.5, 1.4, 0.3],
-                [5.7, 3.8, 1.7, 0.3], [5.1, 3.8, 1.5, 0.3], [5.4, 3.4, 1.7, 0.2],
-                [5.1, 3.7, 1.5, 0.4], [4.6, 3.6, 1.0, 0.2], [5.1, 3.3, 1.7, 0.5],
-                [4.8, 3.4, 1.9, 0.2], [5.0, 3.0, 1.6, 0.2], [5.0, 3.4, 1.6, 0.4],
-                [5.2, 3.5, 1.5, 0.2], [5.2, 3.4, 1.4, 0.2], [4.7, 3.2, 1.6, 0.2]
+        function generateColorPalette() {
+            colorPalette = [
+                color(255, 100, 100),  // Red
+                color(100, 255, 100),  // Green
+                color(100, 100, 255),  // Blue
+                color(255, 255, 100),  // Yellow
+                color(255, 100, 255),  // Magenta
+                color(100, 255, 255),  // Cyan
+                color(255, 165, 0),    // Orange
+                color(128, 0, 128),    // Purple
+                color(255, 192, 203),  // Pink
+                color(165, 42, 42)     // Brown
             ];
+        }
+
+        function showInitialMessage() {
+            background(255);
+            fill(100);
+            textAlign(CENTER, CENTER);
+            textSize(16);
+            text("Upload a CSV file or load sample data to begin", width/2, height/2);
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('data-info').innerHTML = '<div class="loading">Loading and processing CSV file...</div>';
+                
+                Papa.parse(file, {
+                    header: true,
+                    dynamicTyping: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        if (results.errors.length > 0) {
+                            document.getElementById('data-info').innerHTML = 
+                                '<div class="error">Error parsing CSV: ' + results.errors[0].message + '</div>';
+                            return;
+                        }
+                        processData(results.data);
+                    },
+                    error: function(error) {
+                        document.getElementById('data-info').innerHTML = 
+                            '<div class="error">Error reading file: ' + error.message + '</div>';
+                    }
+                });
+            }
+        }
+
+        function loadSampleData() {
+            document.getElementById('data-info').innerHTML = '<div class="loading">Loading sample iris dataset...</div>';
             
-            // Iris versicolor
-            let versicolorData = [
-                [7.0, 3.2, 4.7, 1.4], [6.4, 3.2, 4.5, 1.5], [6.9, 3.1, 4.9, 1.5],
-                [5.5, 2.3, 4.0, 1.3], [6.5, 2.8, 4.6, 1.5], [5.7, 2.8, 4.5, 1.3],
-                [6.3, 3.3, 4.7, 1.6], [4.9, 2.4, 3.3, 1.0], [6.6, 2.9, 4.6, 1.3],
-                [5.2, 2.7, 3.9, 1.4], [5.0, 2.0, 3.5, 1.0], [5.9, 3.0, 4.2, 1.5],
-                [6.0, 2.2, 4.0, 1.0], [6.1, 2.9, 4.7, 1.4], [5.6, 2.9, 3.6, 1.3],
-                [6.7, 3.1, 4.4, 1.4], [5.6, 3.0, 4.5, 1.5], [5.8, 2.7, 4.1, 1.0],
-                [6.2, 2.2, 4.5, 1.5], [5.6, 2.5, 3.9, 1.1], [5.9, 3.2, 4.8, 1.8],
-                [6.1, 2.8, 4.0, 1.3], [6.3, 2.5, 4.9, 1.5], [6.1, 2.8, 4.7, 1.2],
-                [6.4, 2.9, 4.3, 1.3], [6.6, 3.0, 4.4, 1.4], [6.8, 2.8, 4.8, 1.4],
-                [6.7, 3.0, 5.0, 1.7], [6.0, 2.9, 4.5, 1.5], [5.7, 2.6, 3.5, 1.0]
-            ];
+            // Sample iris dataset in CSV format
+            const irisCSV = `sepal_length,sepal_width,petal_length,petal_width,species
+5.1,3.5,1.4,0.2,setosa
+4.9,3.0,1.4,0.2,setosa
+4.7,3.2,1.3,0.2,setosa
+4.6,3.1,1.5,0.2,setosa
+5.0,3.6,1.4,0.2,setosa
+5.4,3.9,1.7,0.4,setosa
+4.6,3.4,1.4,0.3,setosa
+5.0,3.4,1.5,0.2,setosa
+4.4,2.9,1.4,0.2,setosa
+4.9,3.1,1.5,0.1,setosa
+7.0,3.2,4.7,1.4,versicolor
+6.4,3.2,4.5,1.5,versicolor
+6.9,3.1,4.9,1.5,versicolor
+5.5,2.3,4.0,1.3,versicolor
+6.5,2.8,4.6,1.5,versicolor
+5.7,2.8,4.5,1.3,versicolor
+6.3,3.3,4.7,1.6,versicolor
+4.9,2.4,3.3,1.0,versicolor
+6.6,2.9,4.6,1.3,versicolor
+5.2,2.7,3.9,1.4,versicolor
+6.3,3.3,6.0,2.5,virginica
+5.8,2.7,5.1,1.9,virginica
+7.1,3.0,5.9,2.1,virginica
+6.3,2.9,5.6,1.8,virginica
+6.5,3.0,5.8,2.2,virginica
+7.6,3.0,6.6,2.1,virginica
+4.9,2.5,4.5,1.7,virginica
+7.3,2.9,6.3,1.8,virginica
+6.7,2.5,5.8,1.8,virginica
+7.2,3.6,6.1,2.5,virginica`;
+
+            Papa.parse(irisCSV, {
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    processData(results.data);
+                }
+            });
+        }
+
+        function processData(data) {
+            dataset = data;
+            numericalColumns = [];
+            categoricalColumns = [];
             
-            // Iris virginica
-            let virginicaData = [
-                [6.3, 3.3, 6.0, 2.5], [5.8, 2.7, 5.1, 1.9], [7.1, 3.0, 5.9, 2.1],
-                [6.3, 2.9, 5.6, 1.8], [6.5, 3.0, 5.8, 2.2], [7.6, 3.0, 6.6, 2.1],
-                [4.9, 2.5, 4.5, 1.7], [7.3, 2.9, 6.3, 1.8], [6.7, 2.5, 5.8, 1.8],
-                [7.2, 3.6, 6.1, 2.5], [6.5, 3.2, 5.1, 2.0], [6.4, 2.7, 5.3, 1.9],
-                [6.8, 3.0, 5.5, 2.1], [5.7, 2.5, 5.0, 2.0], [5.8, 2.8, 5.1, 2.4],
-                [6.4, 3.2, 5.3, 2.3], [6.5, 3.0, 5.5, 1.8], [7.7, 3.8, 6.7, 2.2],
-                [7.7, 2.6, 6.9, 2.3], [6.0, 2.2, 5.0, 1.5], [6.9, 3.2, 5.7, 2.3],
-                [5.6, 2.8, 4.9, 2.0], [7.7, 2.8, 6.7, 2.0], [6.3, 2.7, 4.9, 1.8],
-                [6.7, 3.3, 5.7, 2.1], [7.2, 3.2, 6.0, 1.8], [6.2, 2.8, 4.8, 1.8],
-                [6.1, 3.0, 4.9, 1.8], [6.4, 2.8, 5.6, 2.1], [7.2, 3.0, 5.8, 1.6]
-            ];
-            
-            // Add setosa data
-            for (let i = 0; i < setosaData.length; i++) {
-                irisDataset.push(new IrisData(setosaData[i][0], setosaData[i][1], 
-                                            setosaData[i][2], setosaData[i][3], "setosa"));
+            if (dataset.length === 0) {
+                document.getElementById('data-info').innerHTML = 
+                    '<div class="error">No data found in file</div>';
+                return;
             }
             
-            // Add versicolor data
-            for (let i = 0; i < versicolorData.length; i++) {
-                irisDataset.push(new IrisData(versicolorData[i][0], versicolorData[i][1], 
-                                            versicolorData[i][2], versicolorData[i][3], "versicolor"));
+            // Analyze columns
+            const sampleRow = dataset[0];
+            Object.keys(sampleRow).forEach(column => {
+                const values = dataset.map(row => row[column]).filter(v => v !== null && v !== undefined && v !== '');
+                
+                if (values.length === 0) return;
+                
+                // Check if column is numerical
+                const numericValues = values.filter(v => typeof v === 'number' && !isNaN(v));
+                const nonEmptyValues = values.filter(v => v !== '' && v !== null && v !== undefined);
+                
+                if (numericValues.length > nonEmptyValues.length * 0.8) {
+                    numericalColumns.push(column);
+                } else {
+                    categoricalColumns.push(column);
+                }
+            });
+            
+            // Display data summary
+            const summary = `
+                <div class="data-summary">
+                    <strong>Data loaded successfully!</strong><br>
+                    Rows: ${dataset.length}<br>
+                    Numerical columns: ${numericalColumns.join(', ')}<br>
+                    Categorical columns: ${categoricalColumns.join(', ')}
+                </div>
+            `;
+            document.getElementById('data-info').innerHTML = summary;
+            
+            // Populate dropdown menus
+            populateDropdowns();
+            
+            // Show controls
+            document.getElementById('controls').classList.add('visible');
+            
+            // Set default selections
+            if (numericalColumns.length >= 2) {
+                document.getElementById('xAxis').value = numericalColumns[0];
+                document.getElementById('yAxis').value = numericalColumns[1];
+                currentXCol = numericalColumns[0];
+                currentYCol = numericalColumns[1];
+                
+                if (categoricalColumns.length > 0) {
+                    document.getElementById('colorBy').value = categoricalColumns[0];
+                    currentColorCol = categoricalColumns[0];
+                }
+                
+                updatePlot();
+            }
+        }
+
+        function populateDropdowns() {
+            const xSelect = document.getElementById('xAxis');
+            const ySelect = document.getElementById('yAxis');
+            const colorSelect = document.getElementById('colorBy');
+            
+            // Clear existing options
+            xSelect.innerHTML = '';
+            ySelect.innerHTML = '';
+            colorSelect.innerHTML = '<option value="">No grouping</option>';
+            
+            // Populate numerical columns
+            numericalColumns.forEach(col => {
+                xSelect.add(new Option(col, col));
+                ySelect.add(new Option(col, col));
+            });
+            
+            // Populate categorical columns
+            categoricalColumns.forEach(col => {
+                colorSelect.add(new Option(col, col));
+            });
+        }
+
+        function updatePlot() {
+            currentXCol = document.getElementById('xAxis').value;
+            currentYCol = document.getElementById('yAxis').value;
+            currentColorCol = document.getElementById('colorBy').value;
+            
+            if (!currentXCol || !currentYCol) {
+                alert('Please select both X and Y axes');
+                return;
             }
             
-            // Add virginica data
-            for (let i = 0; i < virginicaData.length; i++) {
-                irisDataset.push(new IrisData(virginicaData[i][0], virginicaData[i][1], 
-                                            virginicaData[i][2], virginicaData[i][3], "virginica"));
+            // Calculate ranges
+            const xValues = dataset.map(row => row[currentXCol]).filter(v => typeof v === 'number' && !isNaN(v));
+            const yValues = dataset.map(row => row[currentYCol]).filter(v => typeof v === 'number' && !isNaN(v));
+            
+            xRange.min = Math.min(...xValues);
+            xRange.max = Math.max(...xValues);
+            yRange.min = Math.min(...yValues);
+            yRange.max = Math.max(...yValues);
+            
+            // Add padding to ranges
+            const xPadding = (xRange.max - xRange.min) * 0.05;
+            const yPadding = (yRange.max - yRange.min) * 0.05;
+            xRange.min -= xPadding;
+            xRange.max += xPadding;
+            yRange.min -= yPadding;
+            yRange.max += yPadding;
+            
+            // Get unique categories for coloring
+            if (currentColorCol) {
+                uniqueCategories = [...new Set(dataset.map(row => row[currentColorCol]))].filter(v => v !== null && v !== undefined);
+            } else {
+                uniqueCategories = [];
             }
+            
+            plotReady = true;
+            hoveredPoint = null;
         }
 
         function drawScatterplot() {
@@ -172,115 +439,163 @@
             fill(0);
             textAlign(CENTER);
             textSize(14);
-            text("Sepal Length (cm)", width/2, height - 20);
+            text(currentXCol, width/2, height - 20);
             
             push();
             translate(20, height/2);
             rotate(-PI/2);
-            text("Sepal Width (cm)", 0, 0);
+            text(currentYCol, 0, 0);
             pop();
             
             // Draw title
             textAlign(CENTER);
             textSize(18);
-            text("Iris Dataset: Sepal Length vs Sepal Width", width/2, 30);
+            let title = `${currentYCol} vs ${currentXCol}`;
+            if (currentColorCol) {
+                title += ` (colored by ${currentColorCol})`;
+            }
+            text(title, width/2, 30);
             
             // Draw tick marks and labels
+            drawTickMarks();
+            
+            // Plot data points
+            plotDataPoints();
+            
+            // Draw legend if we have categories
+            if (currentColorCol && uniqueCategories.length > 0) {
+                drawLegend();
+            }
+        }
+
+        function drawTickMarks() {
             textAlign(CENTER);
             textSize(10);
             
             // X-axis ticks
-            for (let x = minX; x <= maxX; x += 0.5) {
-                let screenX = map(x, minX, maxX, margin, width - margin);
+            const xTickCount = 6;
+            for (let i = 0; i <= xTickCount; i++) {
+                const xVal = xRange.min + (xRange.max - xRange.min) * i / xTickCount;
+                const screenX = map(xVal, xRange.min, xRange.max, margin, width - margin);
                 line(screenX, height - margin, screenX, height - margin + 5);
-                text(x.toFixed(1), screenX, height - margin + 18);
+                text(xVal.toFixed(1), screenX, height - margin + 18);
             }
             
             // Y-axis ticks
             textAlign(RIGHT);
-            for (let y = minY; y <= maxY; y += 0.5) {
-                let screenY = map(y, minY, maxY, height - margin, margin);
+            const yTickCount = 6;
+            for (let i = 0; i <= yTickCount; i++) {
+                const yVal = yRange.min + (yRange.max - yRange.min) * i / yTickCount;
+                const screenY = map(yVal, yRange.min, yRange.max, height - margin, margin);
                 line(margin - 5, screenY, margin, screenY);
-                text(y.toFixed(1), margin - 10, screenY + 4);
+                text(yVal.toFixed(1), margin - 10, screenY + 4);
             }
-            
-            // Plot data points
+        }
+
+        function plotDataPoints() {
             strokeWeight(1);
-            for (let i = 0; i < irisDataset.length; i++) {
-                let iris = irisDataset[i];
-                let x = map(iris.sepalLength, minX, maxX, margin, width - margin);
-                let y = map(iris.sepalWidth, minY, maxY, height - margin, margin);
+            
+            for (let i = 0; i < dataset.length; i++) {
+                const row = dataset[i];
+                const xVal = row[currentXCol];
+                const yVal = row[currentYCol];
                 
-                // Set color based on species
-                if (iris.species === "setosa") {
-                    fill(255, 100, 100);  // Red
-                    stroke(200, 50, 50);
-                } else if (iris.species === "versicolor") {
-                    fill(100, 255, 100);  // Green
-                    stroke(50, 200, 50);
-                } else { // virginica
-                    fill(100, 100, 255);  // Blue
-                    stroke(50, 50, 200);
+                // Skip invalid data points
+                if (typeof xVal !== 'number' || typeof yVal !== 'number' || isNaN(xVal) || isNaN(yVal)) {
+                    continue;
+                }
+                
+                const x = map(xVal, xRange.min, xRange.max, margin, width - margin);
+                const y = map(yVal, yRange.min, yRange.max, height - margin, margin);
+                
+                // Set color based on category
+                if (currentColorCol && row[currentColorCol]) {
+                    const categoryIndex = uniqueCategories.indexOf(row[currentColorCol]);
+                    const colorIndex = categoryIndex % colorPalette.length;
+                    fill(colorPalette[colorIndex]);
+                    const c = colorPalette[colorIndex];
+                    stroke(red(c) * 0.8, green(c) * 0.8, blue(c) * 0.8);
+                } else {
+                    fill(100, 150, 255);
+                    stroke(50, 100, 200);
                 }
                 
                 ellipse(x, y, 8, 8);
             }
-            
-            // Draw legend
-            drawLegend();
         }
 
         function drawLegend() {
-            let legendX = width - 150;
+            let legendX = width - 180;
             let legendY = 60;
+            let legendHeight = Math.min(uniqueCategories.length * 20 + 20, 200);
             
             // Legend background
             fill(255, 255, 255, 200);
             stroke(0);
-            rect(legendX - 10, legendY - 10, 130, 80);
+            rect(legendX - 10, legendY - 10, 160, legendHeight);
             
             // Legend title
             fill(0);
             textAlign(LEFT);
             textSize(12);
-            text("Species:", legendX, legendY);
+            text(currentColorCol + ":", legendX, legendY);
             
             // Legend items
-            let species = ["setosa", "versicolor", "virginica"];
-            let colors = [color(255, 100, 100), color(100, 255, 100), color(100, 100, 255)];
-            
-            for (let i = 0; i < species.length; i++) {
-                fill(colors[i]);
-                stroke(red(colors[i]) * 0.8, green(colors[i]) * 0.8, blue(colors[i]) * 0.8);
+            for (let i = 0; i < Math.min(uniqueCategories.length, 8); i++) {
+                const colorIndex = i % colorPalette.length;
+                fill(colorPalette[colorIndex]);
+                const c = colorPalette[colorIndex];
+                stroke(red(c) * 0.8, green(c) * 0.8, blue(c) * 0.8);
                 ellipse(legendX + 10, legendY + 20 + i * 20, 8, 8);
                 
                 fill(0);
-                text(species[i], legendX + 20, legendY + 25 + i * 20);
+                const categoryName = String(uniqueCategories[i]);
+                const displayName = categoryName.length > 15 ? categoryName.substring(0, 15) + '...' : categoryName;
+                text(displayName, legendX + 20, legendY + 25 + i * 20);
+            }
+            
+            if (uniqueCategories.length > 8) {
+                fill(0);
+                text(`... and ${uniqueCategories.length - 8} more`, legendX, legendY + 25 + 8 * 20);
             }
         }
 
         function highlightHoveredPoint() {
             if (hoveredPoint !== null) {
-                let iris = irisDataset[hoveredPoint];
-                let x = map(iris.sepalLength, minX, maxX, margin, width - margin);
-                let y = map(iris.sepalWidth, minY, maxY, height - margin, margin);
+                const row = dataset[hoveredPoint];
+                const xVal = row[currentXCol];
+                const yVal = row[currentYCol];
                 
-                // Draw highlight circle
-                fill(255, 255, 0, 100);
-                stroke(255, 255, 0);
-                strokeWeight(2);
-                ellipse(x, y, 15, 15);
+                if (typeof xVal === 'number' && typeof yVal === 'number' && !isNaN(xVal) && !isNaN(yVal)) {
+                    const x = map(xVal, xRange.min, xRange.max, margin, width - margin);
+                    const y = map(yVal, yRange.min, yRange.max, height - margin, margin);
+                    
+                    // Draw highlight circle
+                    fill(255, 255, 0, 100);
+                    stroke(255, 255, 0);
+                    strokeWeight(2);
+                    ellipse(x, y, 15, 15);
+                }
             }
         }
 
         function mouseMoved() {
+            if (!plotReady) return;
+            
             let foundPoint = null;
             
             // Check if mouse is over any data point
-            for (let i = 0; i < irisDataset.length; i++) {
-                let iris = irisDataset[i];
-                let x = map(iris.sepalLength, minX, maxX, margin, width - margin);
-                let y = map(iris.sepalWidth, minY, maxY, height - margin, margin);
+            for (let i = 0; i < dataset.length; i++) {
+                const row = dataset[i];
+                const xVal = row[currentXCol];
+                const yVal = row[currentYCol];
+                
+                if (typeof xVal !== 'number' || typeof yVal !== 'number' || isNaN(xVal) || isNaN(yVal)) {
+                    continue;
+                }
+                
+                const x = map(xVal, xRange.min, xRange.max, margin, width - margin);
+                const y = map(yVal, yRange.min, yRange.max, height - margin, margin);
                 
                 if (dist(mouseX, mouseY, x, y) < 10) {
                     foundPoint = i;
@@ -288,28 +603,32 @@
                 }
             }
             
-            if (foundPoint !== hoveredPoint) {
-                hoveredPoint = foundPoint;
-                drawScatterplot();
-                if (hoveredPoint !== null) {
-                    highlightHoveredPoint();
-                }
-            }
+            hoveredPoint = foundPoint;
         }
 
         function mousePressed() {
+            if (!plotReady) return;
+            
             // Display details when clicking on a point
-            for (let i = 0; i < irisDataset.length; i++) {
-                let iris = irisDataset[i];
-                let x = map(iris.sepalLength, minX, maxX, margin, width - margin);
-                let y = map(iris.sepalWidth, minY, maxY, height - margin, margin);
+            for (let i = 0; i < dataset.length; i++) {
+                const row = dataset[i];
+                const xVal = row[currentXCol];
+                const yVal = row[currentYCol];
+                
+                if (typeof xVal !== 'number' || typeof yVal !== 'number' || isNaN(xVal) || isNaN(yVal)) {
+                    continue;
+                }
+                
+                const x = map(xVal, xRange.min, xRange.max, margin, width - margin);
+                const y = map(yVal, yRange.min, yRange.max, height - margin, margin);
                 
                 if (dist(mouseX, mouseY, x, y) < 10) {
-                    let details = `Species: ${iris.species}<br>` +
-                                 `Sepal Length: ${iris.sepalLength} cm<br>` +
-                                 `Sepal Width: ${iris.sepalWidth} cm<br>` +
-                                 `Petal Length: ${iris.petalLength} cm<br>` +
-                                 `Petal Width: ${iris.petalWidth} cm`;
+                    let details = '<strong>Data Point Details:</strong><br>';
+                    Object.keys(row).forEach(key => {
+                        if (row[key] !== null && row[key] !== undefined && row[key] !== '') {
+                            details += `${key}: ${row[key]}<br>`;
+                        }
+                    });
                     
                     document.getElementById('point-details').innerHTML = details;
                     break;

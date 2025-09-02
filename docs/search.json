@@ -4,7 +4,7 @@
     "href": "Taxonomy-of-Visualization-Tools.html#embed-html-iframe",
     "title": "Taxonomy of Visualization Tools",
     "section": "Embed html iframe",
-    "text": "Embed html iframe\n\n{{./Processing-iris_scatterplot.html}}"
+    "text": "Embed html iframe"
   },
   {
     "objectID": "Taxonomy-of-Visualization-Tools.html#graphics-api-processing",
@@ -138,5 +138,68 @@
     "title": "Taxonomy of Visualization Tools",
     "section": "Code",
     "text": "Code\nWhen you click the Render button a presentation will be generated that includes both content and the output of embedded code. \\(x_1 = 10\\) You can embed code like this:\n\n\n[1] 2"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#types-of-visualization-tools",
+    "href": "Taxonomy-of-Visualization-Tools.html#types-of-visualization-tools",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Types of Visualization Tools",
+    "text": "Types of Visualization Tools\n\nChart Libraries (Typologies)\n\nExcel, Google Sheets, Power BI, Plotly Express\n\nVisual Analysis Grammars\n\nTableau, ggplot2, Altair, Vega-Lite\n\nVisualization Grammars\n\nProtovis, D3,js\n\nComponent Architectures\n\nPrefuse, Flare, VTK\n\nGraphics APIs\n\nProcessing, OpenGL, Java2D"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#next-slide",
+    "href": "Taxonomy-of-Visualization-Tools.html#next-slide",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Next slide",
+    "text": "Next slide\nLooks like it is better to author the processing example in jupyter notebook and then include it in this document while embedding the code as follows in the Embedding Code part of this page: https://quarto.org/docs/authoring/notebook-embed.html with {{&lt; embed penguins.ipynb#species-counts true &gt;}}"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#visualization-tool-dimensions",
+    "href": "Taxonomy-of-Visualization-Tools.html#visualization-tool-dimensions",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Visualization Tool Dimensions",
+    "text": "Visualization Tool Dimensions\n\n\nAbstraction Level\n\nHow much of the visualization pipeline is handled automatically\n\nExpressiveness\n\nThe range of visual designs and customizations possible within the tool’s constraints\n\nEase of Use\n\nHow quickly users can become productive and create visualizations without extensive training\n\nInteraction Capabilities\n\nThe sophistication of cross-chart filtering, linking, and dynamic behaviors supported\n\nData Abstraction\n\nThe tool’s ability to connect to and work with diverse data sources without manual preprocessing\n\nReusability\n\nHow easily visualization logic can be applied to new datasets or replicated across contexts\n\nInterface Paradigm\n\nWhether users specify visualizations through code/markup (declarative) or point-and-click interfaces (GUI)\n\nTheoretical Foundation\n\nWhether the tool is based on formal visualization theories and systematic frameworks versus pragmatic collections of chart types"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#visualization-tool-dimensions-.smaller-.scrollable",
+    "href": "Taxonomy-of-Visualization-Tools.html#visualization-tool-dimensions-.smaller-.scrollable",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Visualization Tool Dimensions {.smaller, .scrollable}",
+    "text": "Visualization Tool Dimensions {.smaller, .scrollable}\n\nAbstraction Level\n\nHow much of the visualization pipeline is handled automatically\n\nExpressiveness\n\nThe range of visual designs and customizations possible within the tool’s constraints\n\nEase of Use\n\nHow quickly users can become productive and create visualizations without extensive training\n\nInteraction Capabilities\n\nThe sophistication of cross-chart filtering, linking, and dynamic behaviors supported\n\nData Abstraction\n\nThe tool’s ability to connect to and work with diverse data sources without manual preprocessing\n\nReusability\n\nHow easily visualization logic can be applied to new datasets or replicated across contexts\n\nInterface Paradigm\n\nWhether users specify visualizations through code/markup (declarative) or point-and-click interfaces (GUI)\n\nTheoretical Foundation\n\nWhether the tool is based on formal visualization theories and systematic frameworks versus pragmatic collections of chart types"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#visualization-tool-dimensions-.smaller",
+    "href": "Taxonomy-of-Visualization-Tools.html#visualization-tool-dimensions-.smaller",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Visualization Tool Dimensions {.smaller}",
+    "text": "Visualization Tool Dimensions {.smaller}\n\nAbstraction Level\n\nHow much of the visualization pipeline is handled automatically\n\nExpressiveness\n\nThe range of visual designs and customizations possible within the tool’s constraints\n\nEase of Use\n\nHow quickly users can become productive and create visualizations without extensive training\n\nInteraction Capabilities\n\nThe sophistication of cross-chart filtering, linking, and dynamic behaviors supported\n\nData Abstraction\n\nThe tool’s ability to connect to and work with diverse data sources without manual preprocessing\n\nReusability\n\nHow easily visualization logic can be applied to new datasets or replicated across contexts\n\nInterface Paradigm\n\nWhether users specify visualizations through code/markup (declarative) or point-and-click interfaces (GUI)\n\nTheoretical Foundation\n\nWhether the tool is based on formal visualization theories and systematic frameworks versus pragmatic collections of chart types"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#glossary-terms",
+    "href": "Taxonomy-of-Visualization-Tools.html#glossary-terms",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Glossary Terms",
+    "text": "Glossary Terms\n\n\nTerms\n\nTerm 1\nTerm 2\nTerm 3\n\n\nDefinitions\n\nTerm 1: The definition for the first term appears here.\n\n\nTerm 2: The definition for the second term appears here.\n\n\nTerm 3: The definition for the third term appears here."
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#key-concepts",
+    "href": "Taxonomy-of-Visualization-Tools.html#key-concepts",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Key Concepts",
+    "text": "Key Concepts\n\n\n\n\nTerm 1\nTerm 2\nTerm 3\n\n\n\nDefinition for Term 1\nThis is the full explanation for the first term.\n\n\nDefinition for Term 2\nThis is the definition for the second term. It can contain multiple paragraphs and other markdown content.\n\n\nDefinition for Term 3\nHere is the definition for the final term. You can style the definition blocks further with custom CSS."
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#interactive-glossary",
+    "href": "Taxonomy-of-Visualization-Tools.html#interactive-glossary",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Interactive Glossary",
+    "text": "Interactive Glossary\nClick a term to see its definition\n\n\n\n\nTerm 1\n\n\nTerm 2\n\n\nTerm 3\n\n\n\n\n\n\nDefinition of Term 1\n\n\nDefinition of Term 2\n\n\nDefinition of Term 3"
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#interactive-glossary-with-makeglossary",
+    "href": "Taxonomy-of-Visualization-Tools.html#interactive-glossary-with-makeglossary",
+    "title": "Taxonomy of Visualization Tools",
+    "section": "Interactive Glossary with makeGlossary",
+    "text": "Interactive Glossary with makeGlossary\nClick a term to see its definition"
   }
 ]

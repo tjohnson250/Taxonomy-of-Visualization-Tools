@@ -15,8 +15,8 @@ py_require("vega_datasets")
 vd = import("vega_datasets")
  
 ```
-Looks like it is better to author the processing example in jupyter notebook and then include it in this document while embedding the code as follows in the Embedding Code part of this page: https://quarto.org/docs/authoring/notebook-embed.html with {{< embed penguins.ipynb#species-counts echo=true >}}
 
+Looks like it is better to author the processing example in jupyter notebook and then include it in this document while embedding the code as follows in the Embedding Code part of this page: https://quarto.org/docs/authoring/notebook-embed.html with {{< embed penguins.ipynb#species-counts echo=true >}}
 
 ## Embed html iframe
 
@@ -29,8 +29,6 @@ Looks like it is better to author the processing example in jupyter notebook and
 ## Graphics API: Processing
 
 ![](./Processing-iris_scatterplot.html){width="100%" height="600px"}
-
-
 
 ## Grammar of Graphics
 
