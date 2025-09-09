@@ -10,10 +10,13 @@ editor: visual
 ---
 
 ## Interactive Glossary with makeGlossary
+
 ### Click a term to see its definition
 
-<div id="gloss1"></div>
+::: {#gloss1}
+:::
 
+```{=html}
 <script>
 makeGlossary("gloss1", [
   { term: "Term 1", definition: "Definition of Term 1" },
@@ -21,19 +24,37 @@ makeGlossary("gloss1", [
   { term: "Term 3", definition: "Definition of Term 3" }
 ]);
 </script>
+```
 
 ## Interactive Glossary
+
 ### Click a term to see its definition
 
-:::: {.columns}
+::::::::: columns
 ::: {.column width="30%"}
-
 <ul id="terms">
-  <li class="active" onclick="showDef('def1', this)">Term 1</li>
-  <li onclick="showDef('def2', this)">Term 2</li>
-  <li onclick="showDef('def3', this)">Term 3</li>
+
+<li class="active" onclick="showDef(&#39;def1&#39;, this)">
+
+Term 1
+
+</li>
+
+<li onclick="showDef(&#39;def2&#39;, this)">
+
+Term 2
+
+</li>
+
+<li onclick="showDef(&#39;def3&#39;, this)">
+
+Term 3
+
+</li>
+
 </ul>
 
+```{=html}
 <style>
   #terms li {
     cursor: pointer;
@@ -44,18 +65,27 @@ makeGlossary("gloss1", [
     color: #007acc; /* highlight color */
   }
 </style>
-
+```
 :::
 
-::: {.column width="70%"}
-<div id="definitions">
-  <div id="def1" class="definition" style="display:block;">Definition of Term 1</div>
-  <div id="def2" class="definition" style="display:none;">Definition of Term 2</div>
-  <div id="def3" class="definition" style="display:none;">Definition of Term 3</div>
-</div>
+::::::: {.column width="70%"}
+:::::: {#definitions}
+::: {#def1 .definition style="display:block;"}
+Definition of Term 1
 :::
-::::
 
+::: {#def2 .definition style="display:none;"}
+Definition of Term 2
+:::
+
+::: {#def3 .definition style="display:none;"}
+Definition of Term 3
+:::
+::::::
+:::::::
+:::::::::
+
+```{=html}
 <script>
 function showDef(id, el) {
   // hide all definitions
@@ -71,44 +101,48 @@ function showDef(id, el) {
   el.classList.add('active');
 }
 </script>
+```
 
 ## Key Concepts
 
+```{=html}
 <style>
 /* Initially hide all definition divs */
 .definition {
   display: none;
 }
 </style>
+```
 
-
-:::{.columns}
-
-:::{.column width="40%"}
-*   <a href="#" onclick="showDefinition(event, 'term1-def');">**Term 1**</a>
-*   <a href="#" onclick="showDefinition(event, 'term2-def');">**Term 2**</a>
-*   <a href="#" onclick="showDefinition(event, 'term3-def');">**Term 3**</a>
+:::::::: columns
+::: {.column width="40%"}
+-   <a href="#" onclick="showDefinition(event, 'term1-def');">**Term 1**</a>
+-   <a href="#" onclick="showDefinition(event, 'term2-def');">**Term 2**</a>
+-   <a href="#" onclick="showDefinition(event, 'term3-def');">**Term 3**</a>
 :::
 
-:::{.column width="60%"}
-<div id="term1-def" class="definition">
+:::::: {.column width="60%"}
+::: {#term1-def .definition}
 ### Definition for Term 1
+
 This is the full explanation for the first term.
-</div>
+:::
 
-<div id="term2-def" class="definition">
+::: {#term2-def .definition}
 ### Definition for Term 2
+
 This is the definition for the second term. It can contain multiple paragraphs and other markdown content.
-</div>
+:::
 
-<div id="term3-def" class="definition">
+::: {#term3-def .definition}
 ### Definition for Term 3
+
 Here is the definition for the final term. You can style the definition blocks further with custom CSS.
-</div>
 :::
+::::::
+::::::::
 
-:::
-
+```{=html}
 <script>
 function showDefinition(event, id) {
   // Prevent the default action of the anchor link
@@ -127,38 +161,39 @@ function showDefinition(event, id) {
   }
 }
 </script>
-
+```
 
 ## Glossary Terms
-::: columns
+
+:::::::: columns
 ::: {.column width="40%"}
 ### Terms
-- [Term 1](#)
-- [Term 2](#)
-- [Term 3](#)
+
+-   [Term 1](#)
+-   [Term 2](#)
+-   [Term 3](#)
 :::
 
-::: {.column width="60%"}
+:::::: {.column width="60%"}
 ### Definitions
 
-::: {.fragment}
+::: fragment
 **Term 1:** The definition for the first term appears here.
 :::
 
-::: {.fragment}
+::: fragment
 **Term 2:** The definition for the second term appears here.
 :::
 
-::: {.fragment}
+::: fragment
 **Term 3:** The definition for the third term appears here.
 :::
-:::
-:::
+::::::
+::::::::
 
 ## Visualization Tool Dimensions {.scrollable}
 
-:::: {.smaller}
-
+::: smaller
 -   **Abstraction Level**
 
     -   How much of the visualization pipeline is handled automatically
@@ -190,9 +225,7 @@ function showDefinition(event, id) {
 -   **Theoretical Foundation**
 
     -   Whether the tool is based on formal visualization theories and systematic frameworks versus pragmatic collections of chart types
-    
-::::    
-    
+:::
 
 ## Types of Visualization Tools
 
