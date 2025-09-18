@@ -1,234 +1,44 @@
 ---
-title: "Taxonomy of Visualization Tools"
+title: "A Taxonomy of Visualization Tools"
 author: "Todd R. Johnson"
+date: today
 format:
   revealjs:
-    # load custom JS globally
-    include-in-header: makeGlossary.js
+    width: 1920
+    height: 1080
 html-math-method: mathjax
 editor: visual
 ---
-
-## Interactive Glossary with makeGlossary
-
-### Click a term to see its definition
-
-::: {#gloss1}
-:::
-
-```{=html}
-<script>
-makeGlossary("gloss1", [
-  { term: "Term 1", definition: "Definition of Term 1" },
-  { term: "Term 2", definition: "Definition of Term 2" },
-  { term: "Term 3", definition: "Definition of Term 3" }
-]);
-</script>
-```
-
-## Interactive Glossary
-
-### Click a term to see its definition
-
-::::::::: columns
-::: {.column width="30%"}
-<ul id="terms">
-
-<li class="active" onclick="showDef(&#39;def1&#39;, this)">
-
-Term 1
-
-</li>
-
-<li onclick="showDef(&#39;def2&#39;, this)">
-
-Term 2
-
-</li>
-
-<li onclick="showDef(&#39;def3&#39;, this)">
-
-Term 3
-
-</li>
-
-</ul>
-
-```{=html}
-<style>
-  #terms li {
-    cursor: pointer;
-    padding: 4px;
-  }
-  #terms li.active {
-    font-weight: bold;
-    color: #007acc; /* highlight color */
-  }
-</style>
-```
-:::
-
-::::::: {.column width="70%"}
-:::::: {#definitions}
-::: {#def1 .definition style="display:block;"}
-Definition of Term 1
-:::
-
-::: {#def2 .definition style="display:none;"}
-Definition of Term 2
-:::
-
-::: {#def3 .definition style="display:none;"}
-Definition of Term 3
-:::
-::::::
-:::::::
-:::::::::
-
-```{=html}
-<script>
-function showDef(id, el) {
-  // hide all definitions
-  document.querySelectorAll('#definitions .definition')
-    .forEach(def => def.style.display = 'none');
-  // show selected one
-  document.getElementById(id).style.display = 'block';
-
-  // remove highlight from all terms
-  document.querySelectorAll('#terms li')
-    .forEach(li => li.classList.remove('active'));
-  // highlight clicked term
-  el.classList.add('active');
-}
-</script>
-```
-
-## Key Concepts
-
-```{=html}
-<style>
-/* Initially hide all definition divs */
-.definition {
-  display: none;
-}
-</style>
-```
-
-:::::::: columns
-::: {.column width="40%"}
--   <a href="#" onclick="showDefinition(event, 'term1-def');">**Term 1**</a>
--   <a href="#" onclick="showDefinition(event, 'term2-def');">**Term 2**</a>
--   <a href="#" onclick="showDefinition(event, 'term3-def');">**Term 3**</a>
-:::
-
-:::::: {.column width="60%"}
-::: {#term1-def .definition}
-### Definition for Term 1
-
-This is the full explanation for the first term.
-:::
-
-::: {#term2-def .definition}
-### Definition for Term 2
-
-This is the definition for the second term. It can contain multiple paragraphs and other markdown content.
-:::
-
-::: {#term3-def .definition}
-### Definition for Term 3
-
-Here is the definition for the final term. You can style the definition blocks further with custom CSS.
-:::
-::::::
-::::::::
-
-```{=html}
-<script>
-function showDefinition(event, id) {
-  // Prevent the default action of the anchor link
-  event.preventDefault();
-  
-  // Hide all definitions
-  const allDefinitions = document.querySelectorAll('.definition');
-  allDefinitions.forEach(el => {
-    el.style.display = 'none';
-  });
-  
-  // Show the selected definition
-  const selectedDef = document.getElementById(id);
-  if (selectedDef) {
-    selectedDef.style.display = 'block';
-  }
-}
-</script>
-```
-
-## Glossary Terms
-
-:::::::: columns
-::: {.column width="40%"}
-### Terms
-
--   [Term 1](#)
--   [Term 2](#)
--   [Term 3](#)
-:::
-
-:::::: {.column width="60%"}
-### Definitions
-
-::: fragment
-**Term 1:** The definition for the first term appears here.
-:::
-
-::: fragment
-**Term 2:** The definition for the second term appears here.
-:::
-
-::: fragment
-**Term 3:** The definition for the third term appears here.
-:::
-::::::
-::::::::
 
 ## Visualization Tool Dimensions {.scrollable}
 
 ::: smaller
 -   **Abstraction Level**
-
     -   How much of the visualization pipeline is handled automatically
 
 -   **Expressiveness**
-
     -   The range of visual designs and customizations possible within the tool's constraints
 
 -   **Ease of Use**
-
     -   How quickly users can become productive and create visualizations without extensive training
 
 -   **Interaction Capabilities**
-
     -   The sophistication of cross-chart filtering, linking, and dynamic behaviors supported
 
 -   **Data Abstraction**
-
     -   The tool's ability to connect to and work with diverse data sources without manual preprocessing
 
 -   **Reusability**
-
     -   How easily visualization logic can be applied to new datasets or replicated across contexts
 
 -   **Interface Paradigm**
-
     -   Whether users specify visualizations through code/markup (declarative) or point-and-click interfaces (GUI)
 
 -   **Theoretical Foundation**
-
     -   Whether the tool is based on formal visualization theories and systematic frameworks versus pragmatic collections of chart types
 :::
 
 ## Types of Visualization Tools
-
 -   Chart Libraries (Typologies)
 
     -   Excel, Google Sheets, Power BI, Plotly Express

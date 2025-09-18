@@ -1,0 +1,325 @@
+---
+title: "Visualization Tool Dimensions"
+subtitle: "A Framework for Understanding Visualization Tools"
+author: "Your Name"
+format:
+  revealjs:
+    theme: default
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+    css: styles.css
+bibliography: references.bib
+---
+
+## How Do We Choose A Visualization Tool to Use?
+
+-   There are many different types of visualization tools.
+
+-   Visualization tools vary along a number of dimensions
+
+-   No single tool is best on all dimensions due to fundamental tradeoffs
+
+-   Heer and Shneiderman [@heer2019; @heer2012] proposed a taxonomy focused largely on **abstraction level**
+
+-   Modern visualization tools require a more nuanced framework
+
+-   I propose **10 dimensions** for comprehensive tool evaluation
+
+## The Ten Dimensions
+
+::::: columns
+::: {.column width="50%"}
+-   **Abstraction Level**
+-   **Expressiveness**
+-   **Ease of Use**
+-   **Interaction Capabilities**
+-   **Data Abstraction**
+:::
+
+::: {.column width="50%"}
+-   **Reusability**
+-   **Interface Paradigm**
+-   **Theoretical Foundation**
+-   **Dissemination/Collaboration**
+-   **Cost**
+:::
+:::::
+
+## Dimension Definitions
+
+-   **Abstraction Level**: How much of the visualization pipeline is handled automatically
+
+-   **Expressiveness**: The range of visual designs and customizations possible within the tool's constraints
+
+-   **Ease of Use**: How quickly users can become productive and create visualizations without extensive training
+
+-   **Interaction Capabilities**: The sophistication of cross-chart filtering, linking, and dynamic behaviors supported
+
+## Dimension Definitions (cont.)
+
+-   **Data Abstraction**: The tool's ability to connect to and work with diverse data sources without manual preprocessing
+
+-   **Reusability**: How easily visualization logic can be applied to new datasets or replicated across contexts
+
+-   **Interface Paradigm**: Whether users specify visualizations through code/markup (declarative) or point-and-click interfaces (GUI)
+
+-   **Theoretical Foundation**: Whether the tool is based on formal visualization theories versus pragmatic collections of chart types
+
+-   **Dissemination/Collaboration**: The tool's options for disseminating and/or collaborating on visualizations
+
+-   **Cost**: Overall cost to use the tool and disseminate viualizations
+
+## Heer's Original Taxonomy[@heer2012]
+
+```         
+Graphics APIs (Processing, OpenGL)
+    ↓
+Component Architectures (Prefuse, VTK)
+    ↓
+Visualization Grammars (D3.js, Protovis)
+    ↓
+Visual Analysis Grammars (ggplot2, Tableau)
+    ↓
+Chart Libraries (Excel, Plotly Express)
+```
+
+**Primarily reflects:** Abstraction Level + Ease of Use
+
+## Beyond Heer: Why More Dimensions?
+
+**Example: Tableau vs. ggplot2**
+
+-   Both have high **Ease of Use** (relatively)
+-   Both have high **Expressiveness**
+-   **But they differ dramatically in:**
+    -   **Reusability** (low vs. high)
+    -   **Interface Paradigm** (GUI vs. declarative)
+    -   **Theoretical Foundation** (pragmatic vs. Grammar of Graphics)
+
+## Declarative Systems Overview
+
+**Code-based specification** enables:
+
+-   **Reproducibility**: Version control, automation
+-   **Reusability**: Templates applicable across datasets\
+-   **Theoretical rigor**: Systematic approaches
+-   **Programmatic generation**: Automated report creation
+
+Let's examine three declarative approaches...
+
+## ggplot2: Grammar of Graphics
+
+**Theoretical Foundation:** Wilkinson's Grammar of Graphics
+
+```{r}
+#| echo: true
+#| eval: false
+library(ggplot2)
+
+# Basic scatter plot
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~cyl) +
+  labs(title = "Fuel Efficiency by Weight and Cylinders",
+       x = "Weight (1000 lbs)", 
+       y = "Miles per Gallon") +
+  theme_minimal()
+```
+
+**Grammar Components:** Data + Aesthetics + Geometries + Statistics + Coordinates + Facets
+
+## ggplot2: Reusability Example
+
+```{r}
+#| echo: true
+#| eval: false
+# Template function - highly reusable
+create_efficiency_plot <- function(data, x_var, y_var, group_var) {
+  ggplot(data, aes(x = !!sym(x_var), y = !!sym(y_var))) +
+    geom_point(aes(color = !!sym(group_var))) +
+    geom_smooth(method = "lm") +
+    facet_wrap(vars(!!sym(group_var))) +
+    theme_minimal()
+}
+
+# Apply to different datasets
+create_efficiency_plot(mtcars, "wt", "mpg", "cyl")
+create_efficiency_plot(clinical_data, "age", "response", "treatment")
+create_efficiency_plot(sales_data, "price", "units", "region")
+```
+
+**High Reusability:** Same logic, different data sources
+
+## D3.js: Data-Driven Documents
+
+**Theoretical Foundation:** Data-join paradigm
+
+```{javascript}
+// D3.js scatter plot
+const svg = d3.select("body").append("svg")
+    .attr("width", 500).attr("height", 400);
+
+const xScale = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.weight))
+    .range([50, 450]);
+
+const yScale = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.mpg))
+    .range([350, 50]);
+
+svg.selectAll("circle")
+    .data(data)
+    .join("circle")
+    .attr("cx", d => xScale(d.weight))
+    .attr("cy", d => yScale(d.mpg))
+    .attr("r", 5);
+```
+
+## D3.js: Interaction Capabilities
+
+```{javascript}
+// Cross-filtering interaction
+svg.selectAll("circle")
+    .data(data)
+    .join("circle")
+    .attr("cx", d => xScale(d.weight))
+    .attr("cy", d => yScale(d.mpg))
+    .attr("r", 5)
+    .on("click", function(event, d) {
+        // Filter other charts based on selection
+        updateHistogram(data.filter(item => item.cyl === d.cyl));
+        updateBarChart(data.filter(item => item.cyl === d.cyl));
+        
+        // Highlight selection
+        d3.selectAll("circle").style("opacity", 0.3);
+        d3.select(this).style("opacity", 1);
+    });
+```
+
+**High Interaction Capabilities:** Programmatic control over all interactions
+
+## Vega-Lite: Grammar of Interactive Graphics
+
+**Theoretical Foundation:** Grammar + Selection model
+
+```{json}
+{
+  "data": {"url": "cars.json"},
+  "mark": "circle",
+  "encoding": {
+    "x": {"field": "weight", "type": "quantitative"},
+    "y": {"field": "mpg", "type": "quantitative"},
+    "color": {"field": "cylinders", "type": "nominal"}
+  },
+  "selection": {
+    "brush": {"type": "interval"}
+  },
+  "transform": [
+    {"filter": {"selection": "brush"}}
+  ]
+}
+```
+
+**Combines:** Declarative grammar + Built-in interaction patterns
+
+## Vega-Lite: Cross-filtering
+
+```{json}
+{
+  "data": {"url": "cars.json"},
+  "vconcat": [
+    {
+      "mark": "circle",
+      "encoding": {
+        "x": {"field": "weight", "type": "quantitative"},
+        "y": {"field": "mpg", "type": "quantitative"},
+        "color": {"condition": {"selection": "brush", "value": "red"}, 
+                  "value": "grey"}
+      },
+      "selection": {"brush": {"type": "interval"}}
+    },
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "cylinders", "type": "nominal"},
+        "y": {"aggregate": "count", "type": "quantitative"}
+      },
+      "transform": [{"filter": {"selection": "brush"}}]
+    }
+  ]
+}
+```
+
+## Comparing Declarative Systems
+
+| Dimension                    | ggplot2     | D3.js       | Vega-Lite   |
+|------------------------------|-------------|-------------|-------------|
+| **Abstraction Level**        | High        | Low         | High        |
+| **Expressiveness**           | High        | Highest     | High        |
+| **Ease of Use**              | Medium      | Low         | Medium      |
+| **Interaction Capabilities** | Low         | Highest     | High        |
+| **Data Abstraction**         | Medium      | Low         | Low         |
+| **Reusability**              | Highest     | High        | High        |
+| **Interface Paradigm**       | Declarative | Declarative | Declarative |
+| **Theoretical Foundation**   | Strong      | Strong      | Strong      |
+
+## Tool Selection Framework
+
+**Use this 8-dimensional framework to:**
+
+1.  **Identify requirements** across all dimensions
+2.  **Avoid single-dimension thinking** (not just ease vs. expressiveness)
+3.  **Understand trade-offs** between competing tools
+4.  **Plan tool combinations** for complex workflows
+5.  **Anticipate scaling challenges** (especially Reusability)
+
+## Real-World Implications
+
+**Healthcare Analytics Example:**
+
+-   **Requirement:** Standard diagnosis charts across 50+ hospitals
+-   **Critical Dimensions:** High Reusability + Data Abstraction
+-   **Tool Choice:** ggplot2 or similar declarative approach
+-   **Why not Tableau?** Low reusability would require 50+ manual recreations
+
+**Executive Dashboard Example:**
+
+-   **Requirement:** Interactive exploration for business users\
+-   **Critical Dimensions:** High Ease of Use + Interaction Capabilities
+-   **Tool Choice:** Tableau or Power BI
+-   **Why not ggplot2?** Limited interaction capabilities
+
+## Future Directions
+
+**Emerging tools attempt to excel across multiple dimensions:**
+
+-   **Observable**: High reusability + interactions + declarative
+-   **Streamlit/Dash**: Code-based + GUI interfaces\
+-   **Altair (Python)**: Grammar of Graphics + Python ecosystem
+-   **AI-assisted tools**: Natural language → declarative specifications
+
+**The goal:** Tools that don't force you to choose between dimensions
+
+## Conclusion
+
+-   **Jeffrey Heer's taxonomy** provided crucial foundation
+-   **8-dimensional framework** captures modern tool complexity
+-   **Declarative systems** offer unique advantages in reusability and theoretical rigor
+-   **No single tool** excels across all dimensions
+-   **Informed tool selection** requires understanding all trade-offs
+
+## Questions & Discussion
+
+**Consider for your use cases:**
+
+1.  Which dimensions are most critical?
+2.  Where are you willing to trade off?
+3.  How do your organizational workflows align with tool strengths?
+4.  What combinations of tools might serve you best?
+
+------------------------------------------------------------------------
+
+**References:** - Heer, J. & Shneiderman, B. (2012). Interactive dynamics for visual analysis - Wilkinson, L. (2005). The Grammar of Graphics\
+- Wickham, H. (2010). A layered grammar of graphics - Satyanarayan, A. et al. (2017). Vega-Lite: A grammar of interactive graphics
