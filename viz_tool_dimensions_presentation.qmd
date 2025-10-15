@@ -1,7 +1,7 @@
 ---
-title: "Visualization Tool Dimensions"
+title: "A Taxonomy of Visualization Tools"
 subtitle: "A Framework for Understanding Visualization Tools"
-author: "Your Name"
+author: "Todd R Johnson"
 format:
   revealjs:
     theme: default
@@ -11,6 +11,24 @@ format:
     css: styles.css
 bibliography: references.bib
 ---
+
+## Objective
+
+\[Expand to multiple slides visually demonstrating each point\]
+
+Visualization tools vary along a number of dimensions, including:
+
+-   User interface: GUI vs. Declarative
+
+-   Expressiveness: Chart libraries vs. more flexible grammar-based tols
+
+-   Data requirements: CSV, Excel, JSON, SQL DB, etc.
+
+These differences reflect fundamental trade-offs in tool design. For instance, chart libraries are easy to use, but have limited expressiveness and flexibility.
+
+Existing taxonomies do not capture all of the relevant dimensions of modern tools
+
+To present a set of dimensions for categorizing, evaluating, selecting existing visualization tools and proposing new tools
 
 ## How Do We Choose A Visualization Tool to Use?
 

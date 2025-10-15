@@ -65,7 +65,7 @@ library(openxlsx)
 library(flextable)
 
 # Load data from an Excel spreadsheet
-data <- read.xlsx("../healthcare cost data.xlsx")
+data <- read.xlsx("./healthcare cost data.xlsx")
 
 # View the data
 flextable(head(data))
