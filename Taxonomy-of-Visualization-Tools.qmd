@@ -35,7 +35,7 @@ Let's examine three critical examples...
 
 ::::: columns
 ::: {.column width="50%"}
-### Excel (GUI)
+### [Excel](https://www.microsoft.com/en-us/microsoft-365/excel) (GUI)
 
 **Task:** Create sales chart for Q4
 
@@ -52,7 +52,7 @@ Let's examine three critical examples...
 :::
 
 ::: {.column width="50%"}
-### ggplot2 (Declarative)
+### [ggplot2](https://ggplot2.tidyverse.org/) (Declarative)
 
 **Same Task:** Create sales chart for Q4
 
@@ -106,7 +106,7 @@ ggplot(q4_data, aes(x = Month, y = Sales)) +
 :::
 
 ::: {.column width="50%"}
-### Grammar-based Tool (ggplot2/D3)
+### Grammar-based Tool (ggplot2/[D3](https://d3js.org/))
 
 **Available charts:** Whatever you can specify
 
@@ -263,7 +263,7 @@ girafe(ggobj = p, width_svg = 11, height_svg = 11,
 
 ## Example 3: Data Requirements
 
-### Tool A: Excel/Google Sheets
+### Tool A: Excel/[Google Sheets](https://www.google.com/sheets/about/)
 
 **Data workflow:**
 
@@ -277,7 +277,7 @@ girafe(ggobj = p, width_svg = 11, height_svg = 11,
 
 ------------------------------------------------------------------------
 
-### Tool B: Tableau
+### Tool B: [Tableau](https://www.tableau.com/)
 
 **Data workflow:**
 
@@ -290,7 +290,7 @@ girafe(ggobj = p, width_svg = 11, height_svg = 11,
 
 ------------------------------------------------------------------------
 
-### Tool C: R + ggplot2
+### Tool C: [R](https://www.r-project.org/) + ggplot2
 
 **Data workflow: Flexible. Data source neutral. Sample SQL DB Connection:**
 
@@ -345,7 +345,7 @@ dbDisconnect(con)
 
 ------------------------------------------------------------------------
 
-## Tool C: R + ggplot + SQL Result
+## Tool C: R + ggplot2 + SQL Result
 
 ```{r}
 #| echo: false
@@ -400,12 +400,12 @@ dbDisconnect(con)
     -   Risk of using outdated data
     -   Multiple files to manage
     -   Time: \~30 minutes/week
--   **Direct connection** (Tableau Server/Power BI):
+-   **Direct connection** (Tableau Server/[Power BI](https://powerbi.microsoft.com/)):
     -   Automated Pipeline, Can combine multiple sources
     -   Always current data
     -   No manual steps
     -   Time: \~0 minutes/week (after setup)
--   **Programmatic access** (Python/R):
+-   **Programmatic access** ([Python](https://www.python.org/)/R):
     -   Automated pipeline, Can combine multiple sources
     -   Can add custom transformations and visualizations
     -   Time: \~0 minutes/week (after pipeline setup)
@@ -454,6 +454,8 @@ flowchart TB
     
 ```
 :::
+
+**Tools in taxonomy:** [Processing](https://processing.org/), [OpenGL](https://www.opengl.org/), [Prefuse](https://prefuse.org/), [VTK](https://vtk.org/), D3.js, [Protovis](https://mbostock.github.io/protovis/), ggplot2, Tableau, Excel, [Plotly Express](https://plotly.com/python/plotly-express/)
 
 **Primarily reflects:** Abstraction Level (and Ease of Use) + Expressiveness
 
@@ -636,7 +638,7 @@ vd = import("vega_datasets")
 :::
 
 ::: {.column width="50%"}
-### Maximum (D3.js/Vega-Lite)
+### Maximum (D3.js/[Vega-Lite](https://vega.github.io/vega-lite/))
 
 -   Custom event handlers
 -   Coordinated multiple views
@@ -646,7 +648,7 @@ vd = import("vega_datasets")
 :::
 :::::
 
-**Example we saw earlier:** Interactive sunburst chart with ggiraph
+**Example we saw earlier:** Interactive sunburst chart with [ggiraph](https://davidgohel.github.io/ggiraph/)
 
 ## 4. Interaction Capabilities: D3.js
 
@@ -1275,7 +1277,7 @@ invisible(dbDisconnect(health_db))
 
 **Excel**: Collection of chart types
 
-**Matplotlib (basic)**: Individual plotting functions
+**[Matplotlib](https://matplotlib.org/) (basic)**: Individual plotting functions
 
 **Benefits:** - Faster for common cases - Less learning required
 
@@ -1478,9 +1480,9 @@ ggplot(data, aes(x = Age, y = Total.Cost)) +
 | Dimension | Excel | Tableau | R/Python | D3.js/Web |
 |---------------|---------------|---------------|---------------|---------------|
 | **Sharing** | Email file | Tableau Server | HTML/PDF/Image | Web hosting |
-| **Collaboration** | Shared files | Tableau Cloud/Server | Git/GitHub | Git/GitHub |
-| **Publishing** | Limited | Tableau Public/Server/Cloud | Quarto/Shiny | Any web server |
-| **Interactivity** | Limited | Full (Server) | Shiny/Dash | Full |
+| **Collaboration** | Shared files | Tableau Cloud/Server | [Git](https://git-scm.com/)/[GitHub](https://github.com/) | Git/GitHub |
+| **Publishing** | Limited | Tableau Public/Server/Cloud | [Quarto](https://quarto.org/)/[Shiny](https://shiny.posit.co/) | Any web server |
+| **Interactivity** | Limited | Full (Server) | Shiny/[Dash](https://plotly.com/dash/) | Full |
 | **Version Control** | Poor | Limited | Excellent (Git) | Excellent (Git) |
 | **Reproducibility** | Poor | Medium | Excellent | Excellent |
 
@@ -1492,7 +1494,7 @@ ggplot(data, aes(x = Age, y = Total.Cost)) +
 
 **Free/Open Source** (Server costs for sharing visualizations)
 
--   **R + ggplot2, Python, matplotlib/altair, D3.js, VEGA, VEGA-Lite**, etc.
+-   **R + ggplot2, Python, Matplotlib/[Altair](https://altair-viz.github.io/), D3.js, [Vega](https://vega.github.io/vega/), Vega-Lite**, etc.
 
 **Freemium (**Free with limits)
 
@@ -1560,8 +1562,8 @@ No tool excels on all dimensions. Common trade-off patterns:
 
 **Emerging tools attempt to excel across multiple dimensions:**
 
--   **Observable**: High reusability + interactions + declarative
--   **Streamlit/Dash**: Code-based + GUI interfaces\
+-   **[Observable](https://observablehq.com/)**: High reusability + interactions + declarative
+-   **[Streamlit](https://streamlit.io/)/Dash**: Code-based + GUI interfaces\
 -   **Altair (Python)**: Grammar of Graphics + Python ecosystem
 -   **AI-assisted tools**: Natural language → declarative specifications
 
@@ -1573,7 +1575,7 @@ No tool excels on all dimensions. Common trade-off patterns:
 
 -   **Jeffrey Heer's taxonomy** provided crucial foundation
 -   **10-dimensional framework** captures modern tool complexity
--   **Declarative systems** offer unique advantages in reusability, reproducibility, etc.
+-   **Declarative systems** (ggplot2, D3.js, Vega-Lite) offer unique advantages in reusability, reproducibility, etc.
 -   **No single tool** excels across all dimensions
 -   **Informed tool selection** requires understanding all trade-offs
 
@@ -1590,7 +1592,7 @@ No tool excels on all dimensions. Common trade-off patterns:
 
 ## Acknowledgements
 
-This presentation was made with the help of Claude and Claude Code using Sonnet 4.5
+This presentation was made with the help of [Claude](https://claude.ai/) and [Claude Code](https://claude.com/claude-code) using Sonnet 4.5
 
 Source code available at: <https://github.com/tjohnson250/Taxonomy-of-Visualization-Tools/>
 

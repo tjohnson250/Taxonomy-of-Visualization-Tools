@@ -1152,7 +1152,7 @@
     "href": "Taxonomy-of-Visualization-Tools.html#heers-original-taxonomy-heer2012-heer2019",
     "title": "A Taxonomy of Visualization Tools",
     "section": "Heer’s Original Taxonomy (Heer and Shneiderman 2012; Heer 2019)",
-    "text": "Heer’s Original Taxonomy (Heer and Shneiderman 2012; Heer 2019)\n\n\n\n\n\n\nflowchart TB\n    A[\"Graphics APIs&lt;br/&gt;(Processing, OpenGL)\"]\n    B[\"Component Architectures&lt;br/&gt;(Prefuse, VTK)\"]\n    C[\"Visualization Grammars&lt;br/&gt;(D3.js, Protovis)\"]\n    D[\"Visual Analysis Grammars&lt;br/&gt;(ggplot2, Tableau)\"]\n    E[\"Chart Libraries&lt;br/&gt;(Excel, Plotly Express)\"]\n\n    A --&gt; B\n    B --&gt; C\n    C --&gt; D\n    D --&gt; E\n\n    \n\n\n\n\n\n\n\nPrimarily reflects: Abstraction Level (and Ease of Use) + Expressiveness"
+    "text": "Heer’s Original Taxonomy (Heer and Shneiderman 2012; Heer 2019)\n\n\n\n\n\n\nflowchart TB\n    A[\"Graphics APIs&lt;br/&gt;(Processing, OpenGL)\"]\n    B[\"Component Architectures&lt;br/&gt;(Prefuse, VTK)\"]\n    C[\"Visualization Grammars&lt;br/&gt;(D3.js, Protovis)\"]\n    D[\"Visual Analysis Grammars&lt;br/&gt;(ggplot2, Tableau)\"]\n    E[\"Chart Libraries&lt;br/&gt;(Excel, Plotly Express)\"]\n\n    A --&gt; B\n    B --&gt; C\n    C --&gt; D\n    D --&gt; E\n\n    \n\n\n\n\n\n\n\nTools in taxonomy: Processing, OpenGL, Prefuse, VTK, D3.js, Protovis, ggplot2, Tableau, Excel, Plotly Express\nPrimarily reflects: Abstraction Level (and Ease of Use) + Expressiveness"
   },
   {
     "objectID": "Taxonomy-of-Visualization-Tools.html#beyond-heer-why-more-dimensions",
@@ -1411,14 +1411,14 @@
     "href": "Taxonomy-of-Visualization-Tools.html#disseminationcollaboration",
     "title": "A Taxonomy of Visualization Tools",
     "section": "9. Dissemination/Collaboration",
-    "text": "9. Dissemination/Collaboration\nDefinition: Options for sharing and collaborating on visualizations\n\n\n\n\n\n\n\n\n\n\nDimension\nExcel\nTableau\nR/Python\nD3.js/Web\n\n\n\n\nSharing\nEmail file\nTableau Server\nHTML/PDF/Image\nWeb hosting\n\n\nCollaboration\nShared files\nTableau Cloud/Server\nGit/GitHub\nGit/GitHub\n\n\nPublishing\nLimited\nTableau Public/Server/Cloud\nQuarto/Shiny\nAny web server\n\n\nInteractivity\nLimited\nFull (Server)\nShiny/Dash\nFull\n\n\nVersion Control\nPoor\nLimited\nExcellent (Git)\nExcellent (Git)\n\n\nReproducibility\nPoor\nMedium\nExcellent\nExcellent"
+    "text": "9. Dissemination/Collaboration\nDefinition: Options for sharing and collaborating on visualizations\n\n\n\nDimension\nExcel\nTableau\nR/Python\nD3.js/Web\n\n\n\n\nSharing\nEmail file\nTableau Server\nHTML/PDF/Image\nWeb hosting\n\n\nCollaboration\nShared files\nTableau Cloud/Server\nGit/GitHub\nGit/GitHub\n\n\nPublishing\nLimited\nTableau Public/Server/Cloud\nQuarto/Shiny\nAny web server\n\n\nInteractivity\nLimited\nFull (Server)\nShiny/Dash\nFull\n\n\nVersion Control\nPoor\nLimited\nExcellent (Git)\nExcellent (Git)\n\n\nReproducibility\nPoor\nMedium\nExcellent\nExcellent"
   },
   {
     "objectID": "Taxonomy-of-Visualization-Tools.html#cost",
     "href": "Taxonomy-of-Visualization-Tools.html#cost",
     "title": "A Taxonomy of Visualization Tools",
     "section": "10. Cost",
-    "text": "10. Cost\nDefinition: Overall cost to use the tool and disseminate visualizations\n\nFree/Open Source (Server costs for sharing visualizations)\n\nR + ggplot2, Python, matplotlib/altair, D3.js, VEGA, VEGA-Lite, etc.\n\nFreemium (Free with limits)\n\nTableau Desktop Public Edition (limited to text-based data files and public web publication)\nGoogle Sheets/Charts\n\nCommercial (rought cost estimate circa 2025)\n\nTableau Desktop: ~$70/month per user\nPower BI: ~$10-20/month per user\nExcel: Part of Microsoft 365 (~$6-20/month)\nCost: Licensing + potential server costs\n\nHidden costs: Training, development cost, maintenance, switching costs"
+    "text": "10. Cost\nDefinition: Overall cost to use the tool and disseminate visualizations\n\nFree/Open Source (Server costs for sharing visualizations)\n\nR + ggplot2, Python, Matplotlib/Altair, D3.js, Vega, Vega-Lite, etc.\n\nFreemium (Free with limits)\n\nTableau Desktop Public Edition (limited to text-based data files and public web publication)\nGoogle Sheets/Charts\n\nCommercial (rought cost estimate circa 2025)\n\nTableau Desktop: ~$70/month per user\nPower BI: ~$10-20/month per user\nExcel: Part of Microsoft 365 (~$6-20/month)\nCost: Licensing + potential server costs\n\nHidden costs: Training, development cost, maintenance, switching costs"
   },
   {
     "objectID": "Taxonomy-of-Visualization-Tools.html#dimension-trade-offs-putting-it-all-together",
@@ -1453,7 +1453,7 @@
     "href": "Taxonomy-of-Visualization-Tools.html#conclusion",
     "title": "A Taxonomy of Visualization Tools",
     "section": "Conclusion",
-    "text": "Conclusion\n\nJeffrey Heer’s taxonomy provided crucial foundation\n10-dimensional framework captures modern tool complexity\nDeclarative systems offer unique advantages in reusability, reproducibility, etc.\nNo single tool excels across all dimensions\nInformed tool selection requires understanding all trade-offs"
+    "text": "Conclusion\n\nJeffrey Heer’s taxonomy provided crucial foundation\n10-dimensional framework captures modern tool complexity\nDeclarative systems (ggplot2, D3.js, Vega-Lite) offer unique advantages in reusability, reproducibility, etc.\nNo single tool excels across all dimensions\nInformed tool selection requires understanding all trade-offs"
   },
   {
     "objectID": "Taxonomy-of-Visualization-Tools.html#questions-discussion",
@@ -1475,5 +1475,12 @@
     "title": "A Taxonomy of Visualization Tools",
     "section": "Acknowledgements",
     "text": "Acknowledgements\nThis presentation was made with the help of Claude and Claude Code using Sonnet 4.5\nSource code available at: https://github.com/tjohnson250/Taxonomy-of-Visualization-Tools/\nReferences:\n\n\n\n\nHeer, Jeffrey. 2019. “CSE 512 - Data Visualization: Visualiation Tools.” http://courses.cs.washington.edu/courses/cse512/19sp/lectures/CSE512-Tools.pdf.\n\n\nHeer, Jeffrey, and Ben Shneiderman. 2012. “Interactive Dynamics for Visual Analysis.” Communications of the ACM 55 (4): 45–54. https://doi.org/10.1145/2133806.2133821.\n\n\nWilkinson, Leland. 2005. The Grammar of Graphics. 2nd ed. New York: Springer. https://doi.org/10.1007/0-387-28695-0."
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#tool-c-r-ggplot2-sql-result",
+    "href": "Taxonomy-of-Visualization-Tools.html#tool-c-r-ggplot2-sql-result",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Tool C: R + ggplot2 + SQL Result",
+    "text": "Tool C: R + ggplot2 + SQL Result\n\n\n[1] 0"
   }
 ]
