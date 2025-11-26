@@ -1446,7 +1446,7 @@
     "href": "Taxonomy-of-Visualization-Tools.html#future-directions",
     "title": "A Taxonomy of Visualization Tools",
     "section": "Future Directions",
-    "text": "Future Directions\nEmerging tools attempt to excel across multiple dimensions:\n\nObservable: High reusability + interactions + declarative\nStreamlit/Dash: Code-based + GUI interfaces\n\nAltair (Python): Grammar of Graphics + Python ecosystem\nAI-assisted tools: Natural language → declarative specifications\n\nThe goal: Tools that don’t force you to choose between dimensions"
+    "text": "Future Directions\nEmerging tools attempt to excel across multiple dimensions:\n\nObservable: High reusability + interactions + declarative\nStreamlit/Dash: Code-based + GUI interfaces\n\nAltair (Python): Grammar of Graphics + Python ecosystem\nAI-assisted tools: Natural language → declarative specifications\n\nThe goal: Tools that don’t force you to choose between dimensions\nFrontier: Tools that have strong data abstraction/connectivity options, complete grammar of interaction, and AI integration"
   },
   {
     "objectID": "Taxonomy-of-Visualization-Tools.html#conclusion",
@@ -1468,5 +1468,12 @@
     "title": "A Taxonomy of Visualization Tools",
     "section": "",
     "text": "References:\n\n\n\n\nHeer, Jeffrey. 2019. “CSE 512 - Data Visualization: Visualiation Tools.” http://courses.cs.washington.edu/courses/cse512/19sp/lectures/CSE512-Tools.pdf.\n\n\nHeer, Jeffrey, and Ben Shneiderman. 2012. “Interactive Dynamics for Visual Analysis.” Communications of the ACM 55 (4): 45–54. https://doi.org/10.1145/2133806.2133821.\n\n\nWilkinson, Leland. 2005. The Grammar of Graphics. 2nd ed. New York: Springer. https://doi.org/10.1007/0-387-28695-0."
+  },
+  {
+    "objectID": "Taxonomy-of-Visualization-Tools.html#acknowledgements",
+    "href": "Taxonomy-of-Visualization-Tools.html#acknowledgements",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nThis presentation was made with the help of Claude and Claude Code using Sonnet 4.5\nSource code available at: https://github.com/tjohnson250/Taxonomy-of-Visualization-Tools/\nReferences:\n\n\n\n\nHeer, Jeffrey. 2019. “CSE 512 - Data Visualization: Visualiation Tools.” http://courses.cs.washington.edu/courses/cse512/19sp/lectures/CSE512-Tools.pdf.\n\n\nHeer, Jeffrey, and Ben Shneiderman. 2012. “Interactive Dynamics for Visual Analysis.” Communications of the ACM 55 (4): 45–54. https://doi.org/10.1145/2133806.2133821.\n\n\nWilkinson, Leland. 2005. The Grammar of Graphics. 2nd ed. New York: Springer. https://doi.org/10.1007/0-387-28695-0."
   }
 ]

@@ -4,7 +4,7 @@ subtitle: "A Framework for Understanding Visualization Tools"
 author: 
   - name: "Todd R Johnson"
     email: "todd.r.johnson@uth.tmc.edu"
-affiliation: UTHealth McWilliams School of Biomedical Informatics
+    affiliation: UTHealth McWilliams School of Biomedical Informatics
 date: 2025-11-26
 date-modified: last-modified
 format:
@@ -1565,6 +1565,8 @@ No tool excels on all dimensions. Common trade-off patterns:
 
 **The goal:** Tools that don't force you to choose between dimensions
 
+**Frontier**: Tools that have strong data abstraction/connectivity options, complete grammar of interaction, and AI integration
+
 ## Conclusion
 
 -   **Jeffrey Heer's taxonomy** provided crucial foundation
@@ -1584,5 +1586,10 @@ No tool excels on all dimensions. Common trade-off patterns:
 
 ------------------------------------------------------------------------
 
-**References:** 
+## Acknowledgements
 
+This presentation was made with the help of Claude and Claude Code using Sonnet 4.5
+
+Source code available at: <https://github.com/tjohnson250/Taxonomy-of-Visualization-Tools/>
+
+**References:**
