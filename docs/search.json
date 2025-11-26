@@ -242,7 +242,7 @@
     "href": "viz_tool_dimensions_presentation.html#beyond-heer-why-more-dimensions",
     "title": "A Taxonomy of Visualization Tools",
     "section": "Beyond Heer: Why More Dimensions?",
-    "text": "Beyond Heer: Why More Dimensions?\nExample: Tableau vs. ggplot2\n\nBoth have high Ease of Use (relatively)\nBoth have high Expressiveness\nBut they differ dramatically in:\n\nReusability (low vs. high)\nInterface Paradigm (GUI vs. declarative)\nTheoretical Foundation (pragmatic vs. Grammar of Graphics)"
+    "text": "Beyond Heer: Why More Dimensions?\nExample: Tableau vs. ggplot2\n\nBoth are at the same Abstraction Level (Visual Analysis Grammars in Heer’s taxonomy)\nBoth have Theoretical Foundations (VizQL vs. Grammar of Graphics)\nBut they differ across multiple other dimensions:\n\nEase of Use: Tableau (high) vs. ggplot2 (medium - requires programming)\nExpressiveness: Tableau (high) vs. ggplot2 (higher - can drop to graphic primitives)\nReusability: Tableau (low - manual GUI) vs. ggplot2 (high - code templates)\nInterface Paradigm: Tableau (GUI drag-and-drop) vs. ggplot2 (declarative code)\nCost: Tableau (commercial) vs. ggplot2 (free/open-source)\n\n\nNote: While Tableau sometimes allows custom visualizations (e.g., Sankey plots), accessing primitives is much harder and more limited than in ggplot2"
   },
   {
     "objectID": "viz_tool_dimensions_presentation.html#declarative-systems-overview",
@@ -305,7 +305,7 @@
     "href": "viz_tool_dimensions_presentation.html#tool-selection-framework",
     "title": "A Taxonomy of Visualization Tools",
     "section": "Tool Selection Framework",
-    "text": "Tool Selection Framework\nUse this 8-dimensional framework to:\n\nIdentify requirements across all dimensions\nAvoid single-dimension thinking (not just ease vs. expressiveness)\nUnderstand trade-offs between competing tools\nPlan tool combinations for complex workflows\nAnticipate scaling challenges (especially Reusability)"
+    "text": "Tool Selection Framework\nUse this 10-dimensional framework to:\n\nIdentify requirements across all dimensions\nAvoid single-dimension thinking (not just ease vs. expressiveness)\nUnderstand trade-offs between competing tools\nPlan tool combinations for complex workflows\nAnticipate scaling challenges (especially Reusability)"
   },
   {
     "objectID": "viz_tool_dimensions_presentation.html#real-world-implications",
@@ -326,7 +326,7 @@
     "href": "viz_tool_dimensions_presentation.html#conclusion",
     "title": "A Taxonomy of Visualization Tools",
     "section": "Conclusion",
-    "text": "Conclusion\n\nJeffrey Heer’s taxonomy provided crucial foundation\n8-dimensional framework captures modern tool complexity\nDeclarative systems offer unique advantages in reusability and theoretical rigor\nNo single tool excels across all dimensions\nInformed tool selection requires understanding all trade-offs"
+    "text": "Conclusion\n\nJeffrey Heer’s taxonomy provided crucial foundation\n10-dimensional framework captures modern tool complexity\nDeclarative systems offer unique advantages in reusability, reproducibility, etc.\nNo single tool excels across all dimensions\nInformed tool selection requires understanding all trade-offs"
   },
   {
     "objectID": "viz_tool_dimensions_presentation.html#questions-discussion",
@@ -340,14 +340,14 @@
     "href": "viz_tool_dimensions_presentation.html#heers-original-taxonomyheer2012",
     "title": "A Taxonomy of Visualization Tools",
     "section": "Heer’s Original Taxonomy(Heer and Shneiderman 2012)",
-    "text": "Heer’s Original Taxonomy(Heer and Shneiderman 2012)\nGraphics APIs (Processing, OpenGL)\n    ↓\nComponent Architectures (Prefuse, VTK)\n    ↓\nVisualization Grammars (D3.js, Protovis)\n    ↓\nVisual Analysis Grammars (ggplot2, Tableau)\n    ↓\nChart Libraries (Excel, Plotly Express)\nPrimarily reflects: Abstraction Level + Ease of Use"
+    "text": "Heer’s Original Taxonomy(Heer and Shneiderman 2012)\n\n\n\n\n\n\nflowchart TB\n    A[\"Graphics APIs&lt;br/&gt;(Processing, OpenGL)\"]\n    B[\"Component Architectures&lt;br/&gt;(Prefuse, VTK)\"]\n    C[\"Visualization Grammars&lt;br/&gt;(D3.js, Protovis)\"]\n    D[\"Visual Analysis Grammars&lt;br/&gt;(ggplot2, Tableau)\"]\n    E[\"Chart Libraries&lt;br/&gt;(Excel, Plotly Express)\"]\n\n    A --&gt; B\n    B --&gt; C\n    C --&gt; D\n    D --&gt; E\n\n    \n\n\n\n\n\n\n\nPrimarily reflects: Abstraction Level (and Ease of Use) + Expressiveness"
   },
   {
     "objectID": "viz_tool_dimensions_presentation.html#references",
     "href": "viz_tool_dimensions_presentation.html#references",
     "title": "A Taxonomy of Visualization Tools",
     "section": "",
-    "text": "References: - Heer, J. & Shneiderman, B. (2012). Interactive dynamics for visual analysis - Wilkinson, L. (2005). The Grammar of Graphics\n- Wickham, H. (2010). A layered grammar of graphics - Satyanarayan, A. et al. (2017). Vega-Lite: A grammar of interactive graphics\n\n\n\n\nHeer, Jeffrey. 2019. “CSE 512 - Data Visualization: Visualiation Tools.” http://courses.cs.washington.edu/courses/cse512/19sp/lectures/CSE512-Tools.pdf.\n\n\nHeer, Jeffrey, and Ben Shneiderman. 2012. “Interactive Dynamics for Visual Analysis.” Communications of the ACM 55 (4): 45–54. https://doi.org/10.1145/2133806.2133821."
+    "text": "References:\n\n\n\n\nHeer, Jeffrey. 2019. “CSE 512 - Data Visualization: Visualiation Tools.” http://courses.cs.washington.edu/courses/cse512/19sp/lectures/CSE512-Tools.pdf.\n\n\nHeer, Jeffrey, and Ben Shneiderman. 2012. “Interactive Dynamics for Visual Analysis.” Communications of the ACM 55 (4): 45–54. https://doi.org/10.1145/2133806.2133821.\n\n\nWilkinson, Leland. 2005. The Grammar of Graphics. 2nd ed. New York: Springer. https://doi.org/10.1007/0-387-28695-0."
   },
   {
     "objectID": "viz_tool_dimensions_presentation.html#the-ten-dimensions",
@@ -508,6 +508,566 @@
     "href": "viz_tool_dimensions_presentation.html#objective",
     "title": "A Taxonomy of Visualization Tools",
     "section": "Objective",
-    "text": "Objective\n[Expand to multiple slides visually demonstrating each point]\nVisualization tools vary along a number of dimensions, including:\n\nUser interface: GUI vs. Declarative\nExpressiveness: Chart libraries vs. more flexible grammar-based tols\nData requirements: CSV, Excel, JSON, SQL DB, etc.\n\nThese differences reflect fundamental trade-offs in tool design. For instance, chart libraries are easy to use, but have limited expressiveness and flexibility.\nExisting taxonomies do not capture all of the relevant dimensions of modern tools\nTo present a set of dimensions for categorizing, evaluating, selecting existing visualization tools and proposing new tools"
+    "text": "Objective\nTo present a framework of dimensions for categorizing, evaluating, and selecting visualization tools\nWhy do we need this?\nVisualization tools make fundamentally different trade-offs that affect:\n\nHow we work with them\nWhat we can create\nHow we scale our work\n\nLet’s examine three critical examples…"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#dimension-1-user-interface",
+    "href": "viz_tool_dimensions_presentation.html#dimension-1-user-interface",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Dimension 1: User Interface",
+    "text": "Dimension 1: User Interface\n\n\nExcel (GUI)\nTask: Create sales chart for Q4\n\nSelect data range\nClick “Insert Chart”\nChoose “Column Chart”\nDrag “Month” to X-axis\nDrag “Sales” to Y-axis\nAdjust colors, labels\n\nPros: Immediate visual feedback, no coding\nCons: Manual process for each new dataset\n\nggplot2 (Declarative)\nSame Task: Create sales chart for Q4\nggplot(q4_data, aes(x = Month, y = Sales)) +\n  geom_col(fill = \"steelblue\") +\n  labs(title = \"Q4 Sales\",\n       x = \"Month\", y = \"Sales ($)\")\nPros: Reusable code, version control, automation\nCons: Requires programming knowledge"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#dimension-1-the-real-impact",
+    "href": "viz_tool_dimensions_presentation.html#dimension-1-the-real-impact",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Dimension 1: The Real Impact",
+    "text": "Dimension 1: The Real Impact\nScenario: Your company has 50 regional offices\n\nGUI approach: Manually create 50 separate charts (hours of repetitive work)\n\nAny design change? Redo all 50 charts manually\nQuality control? Manually verify each one\n\nDeclarative approach: Run the same code on 50 datasets (minutes)\n\nDesign change? Update code once, regenerate all 50\nQuality control? Automated and consistent\n\nThe trade-off: Short-term ease of use vs. long-term scalability"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#dimension-2-expressiveness",
+    "href": "viz_tool_dimensions_presentation.html#dimension-2-expressiveness",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Dimension 2: Expressiveness",
+    "text": "Dimension 2: Expressiveness\n\n\nChart Library (Excel)\nAvailable charts:\n\nBar/Column\nLine\nPie\nScatter\nArea\n~20 predefined types\n\nWhat if you need:\n\nCustom radial visualization?\nNested treemap with custom interactions?\nParallel coordinates plot?\n\nAnswer: You can’t (without plugins/extensions)\n\nGrammar-based Tool (ggplot2/D3)\nAvailable charts: Whatever you can specify\n\nAll standard chart types\nCustom geometries\nNovel visualizations\nComplex compositions\n\nSame custom needs?\nAnswer: Compose from primitives\n\nDefine custom coordinates\nCreate custom geoms/marks\nCombine layers creatively"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#dimension-2-the-real-impact",
+    "href": "viz_tool_dimensions_presentation.html#dimension-2-the-real-impact",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Dimension 2: The Real Impact",
+    "text": "Dimension 2: The Real Impact\nScenario: You need to visualize hierarchical data with custom emphasis\nChart Library Limitation:\n\"We need a sunburst chart with the ability to\nhighlight specific paths and show multiple\nmetrics simultaneously.\"\n\n→ Not available in Excel/standard tools\n→ Wait for vendor to add it?\n→ Switch tools entirely?\nGrammar-based Flexibility:\n# Compose exactly what you need\nggplot(hierarchy_data) +\n  geom_tile(aes(x = level, y = category,\n                fill = primary_metric, alpha = secondary_metric)) +\n  coord_polar() +\n  custom_highlight_layer(paths_to_emphasize)\nThe trade-off: Ease of use vs. creative flexibility"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#dimension-3-data-requirements",
+    "href": "viz_tool_dimensions_presentation.html#dimension-3-data-requirements",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Dimension 3: Data Requirements",
+    "text": "Dimension 3: Data Requirements\nTool A: Excel/Google Sheets\nData workflow:\n\nExport database query to CSV\nDownload CSV file\nOpen in Excel\nCreate visualization\nData updated? Repeat steps 1-4\n\nSupported formats: CSV, Excel, manual entry"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#dimension-3-the-real-impact",
+    "href": "viz_tool_dimensions_presentation.html#dimension-3-the-real-impact",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Dimension 3: The Real Impact",
+    "text": "Dimension 3: The Real Impact\nScenario: Weekly sales dashboard from live database\n\nCSV Export approach (Excel basic):\n\nManual export every week\nRisk of using outdated data\nMultiple files to manage\nTime: ~30 minutes/week\n\nDirect connection (Tableau/Power BI):\n\nAutomatic refresh\nAlways current data\nNo manual steps\nTime: ~0 minutes/week (after setup)\n\nProgrammatic access (Python/R):\n\nAutomated pipeline\nCan combine multiple sources\nCan add custom transformations\nTime: ~0 minutes/week (after pipeline setup)\n\n\nThe trade-off: Simplicity vs. data integration capabilities"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#why-these-dimensions-matter",
+    "href": "viz_tool_dimensions_presentation.html#why-these-dimensions-matter",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Why These Dimensions Matter",
+    "text": "Why These Dimensions Matter\nThese three examples illustrate fundamental trade-offs:\n\nInterface Paradigm: Immediate productivity vs. long-term scalability\nExpressiveness: Ease of use vs. creative freedom\nData Abstraction: Simple setup vs. powerful integration\n\nThe key insight: Different projects have different needs\n\nOne-time analysis → GUI tools excel\nRepeated analysis → Declarative tools excel\nStandard charts → Chart libraries excel\nNovel visualizations → Grammars excel\nSimple data → Manual import works\nComplex data pipelines → Direct connections essential\n\nWe need a comprehensive framework to understand all these trade-offs"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#dimension-2-the-live-example",
+    "href": "viz_tool_dimensions_presentation.html#dimension-2-the-live-example",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Dimension 2: The Live Example",
+    "text": "Dimension 2: The Live Example\nCreating a hierarchical radial visualization with ggplot2:\n\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(ggiraph)\n\n# Create hierarchical product sales data\nproducts &lt;- data.frame(\n  category = c(rep(\"Electronics\", 6), rep(\"Furniture\", 5),\n               rep(\"Office\", 4), rep(\"Software\", 5), rep(\"Services\", 4)),\n  product = c(\"Laptops\", \"Tablets\", \"Phones\", \"Monitors\", \"Cameras\", \"Headphones\",\n              \"Desks\", \"Chairs\", \"Tables\", \"Cabinets\", \"Lamps\",\n              \"Pens\", \"Paper\", \"Staplers\", \"Binders\",\n              \"OS\", \"Productivity\", \"Design\", \"Database\", \"Security\",\n              \"Consulting\", \"Training\", \"Support\", \"Installation\"),\n  revenue = c(450, 320, 580, 210, 180, 95,\n              280, 340, 190, 150, 85,\n              45, 120, 35, 60,\n              380, 290, 250, 420, 340,\n              520, 310, 280, 190),\n  growth = c(15, 22, 8, 12, 18, 25, 18, 25, 10, 5, 12,\n             -2, 8, 3, 7, 28, 32, 22, 19, 24, 35, 18, 22, 15)\n)\n\n# Calculate category-level positions first\ncategories &lt;- products %&gt;%\n  group_by(category) %&gt;%\n  summarise(cat_total = sum(revenue), .groups = 'drop') %&gt;%\n  mutate(cat_fraction = cat_total / sum(cat_total),\n         cat_end = cumsum(cat_fraction),\n         cat_start = lag(cat_end, default = 0),\n         mid = (cat_start + cat_end) / 2,\n         tooltip = paste0(\"&lt;b&gt;\", category, \"&lt;/b&gt;&lt;br/&gt;\",\n                         \"Total Revenue: $\", cat_total, \"K&lt;br/&gt;\",\n                         \"Share: \", round(cat_fraction * 100, 1), \"%\"),\n         data_id = category)\n\n# Calculate product positions within each category\nproducts &lt;- products %&gt;%\n  left_join(categories %&gt;% select(category, cat_start, cat_end, cat_total),\n            by = \"category\") %&gt;%\n  group_by(category) %&gt;%\n  mutate(product_fraction = revenue / sum(revenue),\n         prod_end = cat_start + cumsum(product_fraction) * (cat_end - cat_start),\n         prod_start = lag(prod_end, default = first(cat_start)),\n         tooltip = paste0(\"&lt;b&gt;\", product, \"&lt;/b&gt;&lt;br/&gt;\",\n                         \"Category: \", category, \"&lt;br/&gt;\",\n                         \"Revenue: $\", revenue, \"K&lt;br/&gt;\",\n                         \"Growth: \", growth, \"%\"),\n         data_id = category,\n         onclick = paste0(\"alert('\", product, \": $\", revenue, \"K')\")) %&gt;%\n  ungroup()\n\n# Plot interactive sunburst\np &lt;- ggplot() +\n  # Inner ring - Categories (interactive)\n  geom_rect_interactive(data = categories,\n            aes(xmin = 1, xmax = 2, ymin = cat_start, ymax = cat_end,\n                fill = cat_total,\n                tooltip = tooltip,\n                data_id = data_id),\n            color = \"white\", linewidth = 1.5) +\n  # Outer ring - Products (interactive)\n  geom_rect_interactive(data = products,\n            aes(xmin = 2, xmax = 3, ymin = prod_start, ymax = prod_end,\n                fill = revenue, alpha = growth/50,\n                tooltip = tooltip,\n                data_id = data_id),\n            color = \"white\", linewidth = 0.8) +\n  # Category labels\n  geom_text(data = categories,\n            aes(x = 1.5, y = mid, label = category),\n            size = 3.5, fontface = \"bold\", color = \"white\") +\n  # Product labels\n  geom_text(data = products,\n            aes(x = 3.2, y = (prod_start + prod_end)/2, label = product),\n            size = 2.2, hjust = 0, color = \"gray20\") +\n  scale_fill_gradient2(low = \"lightblue\", mid = \"steelblue\", high = \"navy\",\n                       midpoint = 250, name = \"Revenue ($K)\") +\n  scale_alpha_continuous(range = c(0.5, 1), guide = \"none\") +\n  coord_polar(theta = \"y\") +\n  xlim(0, 4) +\n  theme_void() +\n  theme(legend.position = \"right\",\n        plot.title = element_text(hjust = 0.5, size = 16, face = \"bold\"),\n        plot.subtitle = element_text(hjust = 0.5, size = 11)) +\n  labs(title = \"Company Sales by Category and Product (Interactive Sunburst)\",\n       subtitle = \"Hover for details and to highlight a category\")\n\n# Create interactive plot\ngirafe(ggobj = p, width_svg = 11, height_svg = 11,\n       options = list(\n         opts_hover(css = \"fill:orange;stroke:black;stroke-width:2px;\"),\n         opts_selection(type = \"multiple\", css = \"fill:orange;stroke:black;stroke-width:2px;\"),\n         opts_tooltip(css = \"background-color:white;padding:10px;border-radius:5px;box-shadow:3px 3px 5px rgba(0,0,0,0.3);\")\n       ))\n\n\nThis demonstrates: Composing custom visualizations from grammar primitives"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#dimension-2-the-live-example-output",
+    "href": "viz_tool_dimensions_presentation.html#dimension-2-the-live-example-output",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Dimension 2: The Live Example",
+    "text": "Dimension 2: The Live Example"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#tool-c-result",
+    "href": "viz_tool_dimensions_presentation.html#tool-c-result",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Tool C: Result",
+    "text": "Tool C: Result\n\n\n[1] 0"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#from-examples-to-framework",
+    "href": "viz_tool_dimensions_presentation.html#from-examples-to-framework",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "From Examples to Framework",
+    "text": "From Examples to Framework\nWe’ve just seen three critical dimensions that reveal fundamental tool trade-offs:\n\nInterface Paradigm - How we specify visualizations\nExpressiveness - What we can create\nData Abstraction - How we access data\n\nBut are these three dimensions enough?\n\nHeer and Shneiderman (Heer 2019; Heer and Shneiderman 2012) pioneered taxonomy work focusing on abstraction level (how much of the pipeline is automated)\nTheir framework helped us understand the landscape of visualization tools\nHowever, modern tools have evolved with additional important distinctions\n\nConsider: Two tools might be identical on these three dimensions yet differ dramatically in: - Cost and licensing models - Collaboration and sharing capabilities - Theoretical foundations and consistency - Community support and extensibility\nWe need a more comprehensive framework"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#exploring-each-dimension",
+    "href": "viz_tool_dimensions_presentation.html#exploring-each-dimension",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Exploring Each Dimension",
+    "text": "Exploring Each Dimension\nLet’s examine each of the 10 dimensions in detail with concrete examples…"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#abstraction-level",
+    "href": "viz_tool_dimensions_presentation.html#abstraction-level",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "1. Abstraction Level",
+    "text": "1. Abstraction Level\nDefinition: How much of the visualization pipeline is handled automatically\n\n\nLow Abstraction (OpenGL/Processing)\n// Manually handle every pixel\nfor (int i = 0; i &lt; dataPoints; i++) {\n  float x = map(data[i].x, minX, maxX, 0, width);\n  float y = map(data[i].y, minY, maxY, height, 0);\n  ellipse(x, y, 5, 5);\n}\n// Must handle: scaling, coordinate systems,\n// rendering, colors, legends, axes...\nYou control: Everything\nYou must specify: Everything\n\nHigh Abstraction (Excel/Tableau)\n\nSelect data\nClick “Insert Chart” or “Show Me”\nChoose chart type\nDone\n\nAutomatic: Scales, axes, colors, legends, layout\nTrade-off: Less control, faster creation"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#expressiveness",
+    "href": "viz_tool_dimensions_presentation.html#expressiveness",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "2. Expressiveness",
+    "text": "2. Expressiveness\nDefinition: The range of visual designs and customizations possible\n\nlibrary(ggplot2)\n\n# Create sample data\ndata &lt;- data.frame(\n  x = rep(1:10, 3),\n  y = c(rnorm(10, 5, 1), rnorm(10, 8, 1.5), rnorm(10, 6, 0.8)),\n  group = rep(c(\"A\", \"B\", \"C\"), each = 10)\n)\n\n# High expressiveness: custom annotation layer\nggplot(data, aes(x = x, y = y, color = group)) +\n  geom_point(size = 3, alpha = 0.6) +\n  geom_smooth(method = \"loess\", se = FALSE, linewidth = 1.5) +\n  annotate(\"rect\", xmin = 5, xmax = 8, ymin = 4, ymax = 10,\n           alpha = 0.1, fill = \"red\") +\n  annotate(\"text\", x = 6.5, y = 9.5, label = \"Region of Interest\",\n           size = 4, fontface = \"bold\") +\n  scale_color_manual(values = c(\"A\" = \"#e74c3c\", \"B\" = \"#3498db\", \"C\" = \"#2ecc71\")) +\n  labs(title = \"Custom Composite Visualization\",\n       subtitle = \"Combining points, smoothers, annotations, and custom styling\") +\n  theme_minimal() +\n  theme(legend.position = \"top\",\n        plot.title = element_text(face = \"bold\", size = 16))"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#expressiveness-output",
+    "href": "viz_tool_dimensions_presentation.html#expressiveness-output",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "2. Expressiveness",
+    "text": "2. Expressiveness"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#ease-of-use",
+    "href": "viz_tool_dimensions_presentation.html#ease-of-use",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "3. Ease of Use",
+    "text": "3. Ease of Use\nDefinition: How quickly users can become productive\n\n\n\nTool\nLearning Curve\nFirst Chart\nComplex Chart\n\n\n\n\nExcel\nHours\nMinutes\nHours\n\n\nTableau\nDays\nMinutes\nHours\n\n\nggplot2\nWeeks\nHours\nDays\n\n\nD3.js\nMonths\nDays\nWeeks\n\n\nOpenGL\nMonths+\nWeeks\nMonths\n\n\n\nKey insight: Ease of use inversely correlates with expressiveness and control"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#interaction-capabilities",
+    "href": "viz_tool_dimensions_presentation.html#interaction-capabilities",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "4. Interaction Capabilities",
+    "text": "4. Interaction Capabilities\nDefinition: Sophistication of filtering, linking, and dynamic behaviors\n\n\nLimited (ggplot2/static)\n\nHover tooltips (with packages)\nBasic click events\nMostly static output\n\nHigh (Tableau)\n\nDrag-to-filter\nCross-chart filtering\nParameter controls\nDashboard actions\n\n\nMaximum (D3.js/Vega-Lite)\n\nCustom event handlers\nCoordinated multiple views\nAnimated transitions\nReal-time data updates\nProgrammatic control over everything\n\n\nExample we saw earlier: Interactive sunburst chart with ggiraph"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#data-abstraction",
+    "href": "viz_tool_dimensions_presentation.html#data-abstraction",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "5. Data Abstraction",
+    "text": "5. Data Abstraction\nDefinition: Ability to connect to diverse data sources. Also: ability to create visualizations without modifying original data source\nLevel 1: Manual Entry Only - Excel (basic), Google Sheets - Copy-paste or type data\nLevel 2: File Import - Excel (advanced), most GUI tools - CSV, JSON, Excel files\nLevel 3: Direct Database Connection - Tableau, Power BI, R/Python - SQL databases, cloud services\nLevel 4: Programmatic Access - R/Python with packages - APIs, web scraping, streaming data, any custom source\nImportant Limitations:\n\nBrowser-based JavaScript libraries (D3.js, Vega-Lite, Protovis) only work with JavaScript data structures - require data preprocessed to JSON/arrays\nGraphics APIs (Processing, OpenGL, Java2D) work with in-memory data only - no native database connectivity\nThese tools require external data pipelines or preprocessing to connect to databases"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#reusability",
+    "href": "viz_tool_dimensions_presentation.html#reusability",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "6. Reusability",
+    "text": "6. Reusability\nDefinition: How easily visualization logic can be applied to new datasets\n\nlibrary(DBI)\nlibrary(RSQLite)\nlibrary(visNetwork)\n\n# Create a REUSABLE database schema visualization function\nvisualize_db_schema &lt;- function(db_conn, title) {\n  # Get all tables\n  tables &lt;- dbListTables(db_conn)\n\n  # Create nodes (one per table)\n  nodes &lt;- data.frame(\n    id = tables,\n    label = tables,\n    title = sapply(tables, function(t) {\n      cols &lt;- dbListFields(db_conn, t)\n      paste0(\"&lt;b&gt;\", t, \"&lt;/b&gt;&lt;br&gt;Columns: \", paste(cols, collapse=\", \"))\n    }),\n    color = \"#97C2FC\",\n    shape = \"box\"\n  )\n\n  # Find relationships (foreign keys)\n  edges &lt;- data.frame(from = character(), to = character(), title = character())\n  for(table in tables) {\n    fks &lt;- dbGetQuery(db_conn, paste0(\"PRAGMA foreign_key_list(\", table, \")\"))\n    if(nrow(fks) &gt; 0) {\n      for(i in 1:nrow(fks)) {\n        edge_info &lt;- paste0(\"&lt;b&gt;\", table, \".\", fks$from[i], \"&lt;/b&gt; → &lt;b&gt;\",\n                           fks$table[i], \".\", fks$to[i], \"&lt;/b&gt;\")\n        edges &lt;- rbind(edges, data.frame(from = table, to = fks$table[i],\n                                         title = edge_info))\n      }\n    }\n  }\n\n  visNetwork(nodes, edges, main = title) %&gt;%\n    visEdges(arrows = \"to\", color = list(color = \"#848484\")) %&gt;%\n    visOptions(highlightNearest = TRUE)\n}\n\nSame function works with ANY database - just pass different connections!\nReusability Spectrum: Low: Tableau workbooks (must recreate manually) • Medium: Excel templates (some automation) • High: Code-based tools (ggplot2, D3.js)"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#reusability-output",
+    "href": "viz_tool_dimensions_presentation.html#reusability-output",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "6. Reusability",
+    "text": "6. Reusability"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#interface-paradigm",
+    "href": "viz_tool_dimensions_presentation.html#interface-paradigm",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "7. Interface Paradigm",
+    "text": "7. Interface Paradigm\nDefinition: How users specify visualizations\n\n\nGUI (Graphical)\nExamples: Excel, Tableau, Power BI\nInteraction: - Drag and drop - Point and click - Visual feedback - WYSIWYG\nAdvantages: - Immediate results - Visual exploration - No coding required\nDisadvantages: - Hard to reproduce - Difficult to version control - Manual repetition\n\nDeclarative (Code/Markup)\nExamples: ggplot2, D3.js, Vega-Lite\nInteraction: - Write code/markup - Specify relationships - Describe outcome\nAdvantages: - Reproducible - Version controllable - Automatable - Reusable\nDisadvantages: - Requires programming - Slower initial feedback - Steeper learning curve"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#theoretical-foundation",
+    "href": "viz_tool_dimensions_presentation.html#theoretical-foundation",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "8. Theoretical Foundation",
+    "text": "8. Theoretical Foundation\nDefinition: Based on formal visualization theories vs. pragmatic chart collections\n\n\nStrong Theoretical Foundation\nggplot2: Wilkinson’s Grammar of Graphics - Data → Aesthetics → Geometries → Statistics → Coordinates → Facets\nVega-Lite: Grammar of Interactive Graphics\nTableau: VizQL (Visual Query Language)\nBenefits: - Consistent - Composable - Predictable - Extensible\n\nPragmatic/Typological\nExcel: Collection of chart types\nMatplotlib (basic): Individual plotting functions\nBenefits: - Faster for common cases - Less learning required\n\nWhy it matters:\nGrammars scale better to novel visualizations"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#theoretical-foundation-grammar-of-graphics-example",
+    "href": "viz_tool_dimensions_presentation.html#theoretical-foundation-grammar-of-graphics-example",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "8. Theoretical Foundation: Grammar of Graphics Example",
+    "text": "8. Theoretical Foundation: Grammar of Graphics Example\n\nlibrary(ggplot2)\nlibrary(openxlsx)\n\n# Load healthcare data\ndata &lt;- read.xlsx(\"./healthcare cost data.xlsx\")\n\n# Grammar components: Data + Aesthetics + Geometries + Statistics + Facets\nggplot(data, aes(x = Age, y = Total.Cost, color = Disease)) +\n  # Geometry layer 1: individual points\n  geom_point(alpha = 0.4, size = 2) +\n  # Geometry layer 2: connecting lines\n  geom_line(alpha = 0.3) +\n  # Statistics layer: mean trend\n  stat_summary(geom = \"line\", fun = \"mean\", linewidth = 1.5,\n               aes(group = Disease), color = \"black\") +\n  # Faceting: split by disease\n  facet_wrap(~ Disease, ncol = 3) +\n  # Scales: better colors\n  scale_color_viridis_d(option = \"plasma\") +\n  # Labels\n  labs(title = \"Healthcare Costs by Age and Disease\",\n       subtitle = \"Individual trajectories (colored) with mean trend (black)\",\n       x = \"Patient Age\", y = \"Total Cost ($)\") +\n  theme_minimal() +\n  theme(legend.position = \"none\",\n        strip.text = element_text(face = \"bold\", size = 11))\n\n\nEach component is independent and composable"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#theoretical-foundation-grammar-of-graphics-example-output",
+    "href": "viz_tool_dimensions_presentation.html#theoretical-foundation-grammar-of-graphics-example-output",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "8. Theoretical Foundation: Grammar of Graphics Example",
+    "text": "8. Theoretical Foundation: Grammar of Graphics Example"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#disseminationcollaboration",
+    "href": "viz_tool_dimensions_presentation.html#disseminationcollaboration",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "9. Dissemination/Collaboration",
+    "text": "9. Dissemination/Collaboration\nDefinition: Options for sharing and collaborating on visualizations\n\n\n\n\n\n\n\n\n\n\nDimension\nExcel\nTableau\nR/Python\nD3.js/Web\n\n\n\n\nSharing\nEmail file\nTableau Server\nHTML/PDF/Image\nWeb hosting\n\n\nCollaboration\nShared files\nTableau Cloud/Server\nGit/GitHub\nGit/GitHub\n\n\nPublishing\nLimited\nTableau Public/Server/Cloud\nQuarto/Shiny\nAny web server\n\n\nInteractivity\nLimited\nFull (Server)\nShiny/Dash\nFull\n\n\nVersion Control\nPoor\nLimited\nExcellent (Git)\nExcellent (Git)\n\n\nReproducibility\nPoor\nMedium\nExcellent\nExcellent"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#cost",
+    "href": "viz_tool_dimensions_presentation.html#cost",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "10. Cost",
+    "text": "10. Cost\nDefinition: Overall cost to use the tool and disseminate visualizations\n\nFree/Open Source (Server costs for sharing visualizations)\n\nR + ggplot2, Python, matplotlib/altair, D3.js, VEGA, VEGA-Lite, etc.\n\nFreemium (Free with limits)\n\nTableau Desktop Public Edition (limited to text-based data files and public web publication)\nGoogle Sheets/Charts\n\nCommercial (rought cost estimate circa 2025)\n\nTableau Desktop: ~$70/month per user\nPower BI: ~$10-20/month per user\nExcel: Part of Microsoft 365 (~$6-20/month)\nCost: Licensing + potential server costs\n\nHidden costs: Training, development cost, maintenance, switching costs"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#dimension-trade-offs-putting-it-all-together",
+    "href": "viz_tool_dimensions_presentation.html#dimension-trade-offs-putting-it-all-together",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Dimension Trade-offs: Putting It All Together",
+    "text": "Dimension Trade-offs: Putting It All Together\nNo tool excels on all dimensions. Common trade-off patterns:\nHigh Ease of Use ↔︎ High Expressiveness - Excel (easy) vs. D3.js (expressive)\nGUI Interface ↔︎ High Reusability - Tableau (GUI) vs. ggplot2 (reusable)\nLow Cost ↔︎ High Ease of Use - Free tools have steeper learning curves\nHigh Abstraction ↔︎ High Expressiveness - More automation = less control\nStrong Theory ↔︎ Ease of Use (short-term) - Grammars take longer to learn but scale better"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#interaction-capabilities-vega-lite-example",
+    "href": "viz_tool_dimensions_presentation.html#interaction-capabilities-vega-lite-example",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "4. Interaction Capabilities: Vega-Lite Example",
+    "text": "4. Interaction Capabilities: Vega-Lite Example\nCross-filtering with brush selection:\n\nimport altair as alt\nfrom vega_datasets import data\n\n# Load cars dataset\ncars = data.cars()\n\n# Create a brush selection\nbrush = alt.selection_interval(name='brush')\n\n# Scatter plot with brush selection\nscatter = alt.Chart(cars).mark_point().encode(\n    x=alt.X('Horsepower:Q', scale=alt.Scale(zero=False)),\n    y=alt.Y('Miles_per_Gallon:Q', scale=alt.Scale(zero=False)),\n    color=alt.condition(brush, 'Origin:N', alt.value('lightgray')),\n    size=alt.value(60)\n).properties(\n    width=400,\n    height=300,\n    title='Select cars by dragging on the scatter plot'\n).add_params(brush)\n\n# Bar chart filtered by brush selection\nbars = alt.Chart(cars).mark_bar().encode(\n    x='count():Q',\n    y='Origin:N',\n    color='Origin:N'\n).transform_filter(\n    brush\n).properties(\n    width=400,\n    height=300,\n    title='Count of selected cars by origin'\n)\n\n# Combine side-by-side\nscatter | bars\n\nDemonstrates: Declarative interaction specification - no custom event handlers needed!"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#live-vega-lite-interaction",
+    "href": "viz_tool_dimensions_presentation.html#live-vega-lite-interaction",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "4. Live Vega-Lite Interaction",
+    "text": "4. Live Vega-Lite Interaction\n\n\n\n\n\n  \n  \n  \n  \n  \n\n\n  \n  \n\n\n\n\nTry it: Drag to select points on the scatter plot and watch the bar chart update!"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#interaction-capabilities-d3.js-example",
+    "href": "viz_tool_dimensions_presentation.html#interaction-capabilities-d3.js-example",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "4. Interaction Capabilities: D3.js Example",
+    "text": "4. Interaction Capabilities: D3.js Example\nBrush selection with cross-filtering:\n\n  \n  \n\n\n\nRequires ~100+ lines of custom JavaScript for brush handling, filtering, and coordinated updates.\nThis took multiple rounds of prompting in Claude Code plus debugging in the Chrome console to get right. Estimated time: ~ 30 minutes.\nMost visualization packages lack appropriate interaction abstractions making them hard for humans and AI to use."
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#example-1-user-interface",
+    "href": "viz_tool_dimensions_presentation.html#example-1-user-interface",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Example 1: User Interface",
+    "text": "Example 1: User Interface\n\n\nExcel (GUI)\nTask: Create sales chart for Q4\n\nSelect data range\nClick “Insert Chart”\nChoose “Column Chart”\nDrag “Month” to X-axis\nDrag “Sales” to Y-axis\nAdjust colors, labels\n\nPros: Immediate visual feedback, no coding\nCons: Manual process for each new dataset\n\nggplot2 (Declarative)\nSame Task: Create sales chart for Q4\nggplot(q4_data, aes(x = Month, y = Sales)) +\n  geom_col(fill = \"steelblue\") +\n  labs(title = \"Q4 Sales\",\n       x = \"Month\", y = \"Sales ($)\")\nPros: Reusable code, version control, automation\nCons: Requires programming knowledge"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#user-interface-the-real-impact",
+    "href": "viz_tool_dimensions_presentation.html#user-interface-the-real-impact",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "User Interface: The Real Impact",
+    "text": "User Interface: The Real Impact\nScenario: Your company has 50 regional offices\n\nGUI approach: Manually create 50 separate charts (hours of repetitive work)\n\nAny design change? Redo all 50 charts manually\nQuality control? Manually verify each one\n\nDeclarative approach: Run the same code on 50 datasets (minutes)\n\nDesign change? Update code once, regenerate all 50\nQuality control? Automated and consistent\n\nThe trade-off: Short-term ease of use vs. long-term scalability"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#example-2-expressiveness",
+    "href": "viz_tool_dimensions_presentation.html#example-2-expressiveness",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Example 2: Expressiveness",
+    "text": "Example 2: Expressiveness\n\n\nChart Library (Excel)\nAvailable charts:\n\nBar/Column\nLine\nPie\nScatter\nArea\n~20 predefined types\n\nWhat if you need:\n\nCustom radial visualization?\nNested treemap with custom interactions?\nParallel coordinates plot?\n\nAnswer: You can’t (without plugins/extensions)\n\nGrammar-based Tool (ggplot2/D3)\nAvailable charts: Whatever you can specify\n\nAll standard chart types\nCustom geometries\nNovel visualizations\nComplex compositions\n\nSame custom needs?\nAnswer: Compose from primitives\n\nDefine custom coordinates\nCreate custom geoms/marks\nCombine layers creatively"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#expressiveness-the-real-impact",
+    "href": "viz_tool_dimensions_presentation.html#expressiveness-the-real-impact",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Expressiveness: The Real Impact",
+    "text": "Expressiveness: The Real Impact\nScenario: You need to visualize hierarchical data with custom emphasis\nChart Library Limitation:\n\"We need a sunburst chart with the ability to\nhighlight categories and show multiple\nmetrics simultaneously.\"\n\n→ Not available in Excel/standard tools\n→ Wait for vendor to add it?\n→ Switch tools entirely?\nGrammar-based Flexibility:\n# Compose exactly what you need\nggplot(hierarchy_data) +\n  geom_tile(aes(x = level, y = category,\n                fill = primary_metric, alpha = secondary_metric)) +\n  coord_polar() +\n  custom_highlight_layer(paths_to_emphasize)\nThe trade-off: Ease of use vs. creative flexibility"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#expressiveness-live-example",
+    "href": "viz_tool_dimensions_presentation.html#expressiveness-live-example",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Expressiveness: Live Example",
+    "text": "Expressiveness: Live Example\nCreating a hierarchical radial visualization with ggplot2:\n\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(ggiraph)\n\n# Create hierarchical product sales data\nproducts &lt;- data.frame(\n  category = c(rep(\"Electronics\", 6), rep(\"Furniture\", 5),\n               rep(\"Office\", 4), rep(\"Software\", 5), rep(\"Services\", 4)),\n  product = c(\"Laptops\", \"Tablets\", \"Phones\", \"Monitors\", \"Cameras\", \"Headphones\",\n              \"Desks\", \"Chairs\", \"Tables\", \"Cabinets\", \"Lamps\",\n              \"Pens\", \"Paper\", \"Staplers\", \"Binders\",\n              \"OS\", \"Productivity\", \"Design\", \"Database\", \"Security\",\n              \"Consulting\", \"Training\", \"Support\", \"Installation\"),\n  revenue = c(450, 320, 580, 210, 180, 95,\n              280, 340, 190, 150, 85,\n              45, 120, 35, 60,\n              380, 290, 250, 420, 340,\n              520, 310, 280, 190),\n  growth = c(15, 22, 8, 12, 18, 25, 18, 25, 10, 5, 12,\n             -2, 8, 3, 7, 28, 32, 22, 19, 24, 35, 18, 22, 15)\n)\n\n# Calculate category-level positions first\ncategories &lt;- products %&gt;%\n  group_by(category) %&gt;%\n  summarise(cat_total = sum(revenue), .groups = 'drop') %&gt;%\n  mutate(cat_fraction = cat_total / sum(cat_total),\n         cat_end = cumsum(cat_fraction),\n         cat_start = lag(cat_end, default = 0),\n         mid = (cat_start + cat_end) / 2,\n         tooltip = paste0(\"&lt;b&gt;\", category, \"&lt;/b&gt;&lt;br/&gt;\",\n                         \"Total Revenue: $\", cat_total, \"K&lt;br/&gt;\",\n                         \"Share: \", round(cat_fraction * 100, 1), \"%\"),\n         data_id = category)\n\n# Calculate product positions within each category\nproducts &lt;- products %&gt;%\n  left_join(categories %&gt;% select(category, cat_start, cat_end, cat_total),\n            by = \"category\") %&gt;%\n  group_by(category) %&gt;%\n  mutate(product_fraction = revenue / sum(revenue),\n         prod_end = cat_start + cumsum(product_fraction) * (cat_end - cat_start),\n         prod_start = lag(prod_end, default = first(cat_start)),\n         tooltip = paste0(\"&lt;b&gt;\", product, \"&lt;/b&gt;&lt;br/&gt;\",\n                         \"Category: \", category, \"&lt;br/&gt;\",\n                         \"Revenue: $\", revenue, \"K&lt;br/&gt;\",\n                         \"Growth: \", growth, \"%\"),\n         data_id = category,\n         onclick = paste0(\"alert('\", product, \": $\", revenue, \"K')\")) %&gt;%\n  ungroup()\n\n# Plot interactive sunburst\np &lt;- ggplot() +\n  # Inner ring - Categories (interactive)\n  geom_rect_interactive(data = categories,\n            aes(xmin = 1, xmax = 2, ymin = cat_start, ymax = cat_end,\n                fill = cat_total,\n                tooltip = tooltip,\n                data_id = data_id),\n            color = \"white\", linewidth = 1.5) +\n  # Outer ring - Products (interactive)\n  geom_rect_interactive(data = products,\n            aes(xmin = 2, xmax = 3, ymin = prod_start, ymax = prod_end,\n                fill = revenue, alpha = growth/50,\n                tooltip = tooltip,\n                data_id = data_id),\n            color = \"white\", linewidth = 0.8) +\n  # Category labels\n  geom_text(data = categories,\n            aes(x = 1.5, y = mid, label = category),\n            size = 3.5, fontface = \"bold\", color = \"white\") +\n  # Product labels\n  geom_text(data = products,\n            aes(x = 3.2, y = (prod_start + prod_end)/2, label = product),\n            size = 2.2, hjust = 0, color = \"gray20\") +\n  scale_fill_gradient2(low = \"lightblue\", mid = \"steelblue\", high = \"navy\",\n                       midpoint = 250, name = \"Revenue ($K)\") +\n  scale_alpha_continuous(range = c(0.5, 1), guide = \"none\") +\n  coord_polar(theta = \"y\") +\n  xlim(0, 4) +\n  theme_void() +\n  theme(legend.position = \"right\",\n        plot.title = element_text(hjust = 0.5, size = 16, face = \"bold\"),\n        plot.subtitle = element_text(hjust = 0.5, size = 11)) +\n  labs(title = \"Company Sales by Category and Product (Interactive Sunburst)\",\n       subtitle = \"Hover for details and to highlight a category\")\n\n# Create interactive plot\ngirafe(ggobj = p, width_svg = 11, height_svg = 11,\n       options = list(\n         opts_hover(css = \"fill:orange;stroke:black;stroke-width:2px;\"),\n         opts_selection(type = \"multiple\", css = \"fill:orange;stroke:black;stroke-width:2px;\"),\n         opts_tooltip(css = \"background-color:white;padding:10px;border-radius:5px;box-shadow:3px 3px 5px rgba(0,0,0,0.3);\")\n       ))\n\n\nThis demonstrates: Composing custom visualizations from grammar primitives"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#expressiveness-live-example-output",
+    "href": "viz_tool_dimensions_presentation.html#expressiveness-live-example-output",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Expressiveness: Live Example",
+    "text": "Expressiveness: Live Example"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#example-3-data-requirements",
+    "href": "viz_tool_dimensions_presentation.html#example-3-data-requirements",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Example 3: Data Requirements",
+    "text": "Example 3: Data Requirements\nTool A: Excel/Google Sheets\nData workflow:\n\nExport database query to CSV\nDownload CSV file\nOpen in Excel\nCreate visualization\nData updated? Repeat steps 1-4\n\nSupported formats: CSV, Excel, manual entry"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#data-requirements-the-real-impact",
+    "href": "viz_tool_dimensions_presentation.html#data-requirements-the-real-impact",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Data Requirements: The Real Impact",
+    "text": "Data Requirements: The Real Impact\nScenario: Weekly sales dashboard from live database\n\n\nCSV Export approach (Excel basic):\n\nManual export every week\nRisk of using outdated data\nMultiple files to manage\nTime: ~30 minutes/week\n\nDirect connection (Tableau Server/Power BI):\n\nAutomated Pipeline, Can combine multiple sources\nAlways current data\nNo manual steps\nTime: ~0 minutes/week (after setup)\n\nProgrammatic access (Python/R):\n\nAutomated pipeline, Can combine multiple sources\nCan add custom transformations and visualizations\nTime: ~0 minutes/week (after pipeline setup)\n\n\n\nThe trade-off: Simplicity vs. data integration capabilities"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#why-these-differences-matter",
+    "href": "viz_tool_dimensions_presentation.html#why-these-differences-matter",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Why These Differences Matter",
+    "text": "Why These Differences Matter\nThese three examples illustrate fundamental trade-offs:\n\nInterface Paradigm: Immediate productivity vs. long-term scalability\nExpressiveness: Ease of use vs. customizability\nData Abstraction: Simple setup vs. powerful integration\n\nThe key insight: Different projects have different needs\n\nOne-time analysis → GUI tools excel\nRepeated analysis (or reproducibility)→ Declarative tools excel\nStandard charts → Chart libraries excel\nNovel visualizations → Grammars excel\nSimple data → Manual import works\nComplex data pipelines → Direct connections essential\n\nWe need a comprehensive framework to understand all these trade-offs"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#tool-c-r-ggplot-sql-result",
+    "href": "viz_tool_dimensions_presentation.html#tool-c-r-ggplot-sql-result",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Tool C: R + ggplot + SQL Result",
+    "text": "Tool C: R + ggplot + SQL Result\n\n\n[1] 0"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#heers-original-taxonomyheer2019-heer2012",
+    "href": "viz_tool_dimensions_presentation.html#heers-original-taxonomyheer2019-heer2012",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Heer’s Original TaxonomyHeer and Shneiderman (2012)",
+    "text": "Heer’s Original TaxonomyHeer and Shneiderman (2012)\n\n\n\n\n\n\nflowchart TB\n    A[\"Graphics APIs&lt;br/&gt;(Processing, OpenGL)\"]\n    B[\"Component Architectures&lt;br/&gt;(Prefuse, VTK)\"]\n    C[\"Visualization Grammars&lt;br/&gt;(D3.js, Protovis)\"]\n    D[\"Visual Analysis Grammars&lt;br/&gt;(ggplot2, Tableau)\"]\n    E[\"Chart Libraries&lt;br/&gt;(Excel, Plotly Express)\"]\n\n    A --&gt; B\n    B --&gt; C\n    C --&gt; D\n    D --&gt; E\n\n    \n\n\n\n\n\n\n\nPrimarily reflects: Abstraction Level (and Ease of Use) + Expressiveness"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#heers-original-taxonomy-heer2012-heer2019",
+    "href": "viz_tool_dimensions_presentation.html#heers-original-taxonomy-heer2012-heer2019",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Heer’s Original Taxonomy (Heer and Shneiderman 2012; Heer 2019)",
+    "text": "Heer’s Original Taxonomy (Heer and Shneiderman 2012; Heer 2019)\n\n\n\n\n\n\nflowchart TB\n    A[\"Graphics APIs&lt;br/&gt;(Processing, OpenGL)\"]\n    B[\"Component Architectures&lt;br/&gt;(Prefuse, VTK)\"]\n    C[\"Visualization Grammars&lt;br/&gt;(D3.js, Protovis)\"]\n    D[\"Visual Analysis Grammars&lt;br/&gt;(ggplot2, Tableau)\"]\n    E[\"Chart Libraries&lt;br/&gt;(Excel, Plotly Express)\"]\n\n    A --&gt; B\n    B --&gt; C\n    C --&gt; D\n    D --&gt; E\n\n    \n\n\n\n\n\n\n\nPrimarily reflects: Abstraction Level (and Ease of Use) + Expressiveness"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#interaction-capabilities-d3.js-code",
+    "href": "viz_tool_dimensions_presentation.html#interaction-capabilities-d3.js-code",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "4. Interaction Capabilities: D3.js Code",
+    "text": "4. Interaction Capabilities: D3.js Code\nBrush selection with cross-filtering (66 lines of JavaScript):\n// Setup scales, axes, and SVG containers\nconst margin = {top: 20, right: 20, bottom: 50, left: 70};\nconst width = 380 - margin.left - margin.right;\nconst height = 280 - margin.top - margin.bottom;\n\nconst scatterSvg = d3.select(\"#d3-scatter\")\n  .append(\"svg\")\n  .attr(\"width\", width + margin.left + margin.right)\n  .attr(\"height\", height + margin.top + margin.bottom)\n  .append(\"g\")\n  .attr(\"transform\", `translate(${margin.left},${margin.top})`);\n\n// Create brush for selection\nconst brush = d3.brush()\n  .extent([[0, 0], [width, height]])\n  .on(\"brush\", brushed)\n  .on(\"end\", brushed);\n\nscatterSvg.append(\"g\").attr(\"class\", \"brush\").call(brush);\n\n// Custom event handler for brush interaction\nfunction brushed() {\n  const selection = d3.brushSelection(this);\n  if (!selection) {\n    scatterSvg.selectAll(\"circle\")\n      .attr(\"fill\", d =&gt; colorScale(d.Origin));\n    updateBars(cars);\n    return;\n  }\n\n  const [[x0, y0], [x1, y1]] = selection;\n  const filtered = cars.filter(d =&gt; {\n    const x = xScale(d.Horsepower);\n    const y = yScale(d.Miles_per_Gallon);\n    return x &gt;= x0 && x &lt;= x1 && y &gt;= y0 && y &lt;= y1;\n  });\n\n  scatterSvg.selectAll(\"circle\")\n    .attr(\"fill\", d =&gt; {\n      const x = xScale(d.Horsepower);\n      const y = yScale(d.Miles_per_Gallon);\n      const inBrush = x &gt;= x0 && x &lt;= x1 && y &gt;= y0 && y &lt;= y1;\n      return inBrush ? colorScale(d.Origin) : \"lightgray\";\n    });\n\n  updateBars(filtered);\n}\n\n// Update bar chart based on filtered data\nfunction updateBars(filteredData) {\n  const counts = {};\n  filteredData.forEach(d =&gt; {\n    counts[d.Origin] = (counts[d.Origin] || 0) + 1;\n  });\n\n  const barData = [\"USA\", \"Europe\", \"Japan\"].map(origin =&gt; ({\n    origin: origin,\n    count: counts[origin] || 0\n  }));\n\n  barSvg.selectAll(\".bar\")\n    .data(barData, d =&gt; d.origin)\n    .transition()\n    .duration(200)\n    .attr(\"width\", d =&gt; xBarScale(d.count));\n}\n\nNote: Total implementation requires ~150 lines including data setup, scale creation, axes, and SVG configuration"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#interaction-capabilities-vega-lite",
+    "href": "viz_tool_dimensions_presentation.html#interaction-capabilities-vega-lite",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "4. Interaction Capabilities: Vega-Lite",
+    "text": "4. Interaction Capabilities: Vega-Lite\nExplore the Vega-Lite visualization grammar:"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#interaction-capabilities-d3.js",
+    "href": "viz_tool_dimensions_presentation.html#interaction-capabilities-d3.js",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "4. Interaction Capabilities: D3.js",
+    "text": "4. Interaction Capabilities: D3.js\nExplore the D3.js data visualization library:"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#reusability-live-example",
+    "href": "viz_tool_dimensions_presentation.html#reusability-live-example",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "6. Reusability: Live Example",
+    "text": "6. Reusability: Live Example\n\nOne function, multiple datasets - just change the parameters!"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#reusability-e-commerce-database",
+    "href": "viz_tool_dimensions_presentation.html#reusability-e-commerce-database",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "6. Reusability: E-Commerce Database",
+    "text": "6. Reusability: E-Commerce Database\n\n\n[1] 0\n\n\n[1] 0\n\n\n[1] 0\n\n\n[1] 0\n\n\n[1] 0"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#reusability-healthcare-database",
+    "href": "viz_tool_dimensions_presentation.html#reusability-healthcare-database",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "6. Reusability: Healthcare Database",
+    "text": "6. Reusability: Healthcare Database\n\n\n[1] 0\n\n\n[1] 0\n\n\n[1] 0\n\n\n[1] 0\n\n\n[1] 0\n\n\n\n\n\n\nSame function, two completely different database schemas - that’s reusability!"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#reusability-live-examples",
+    "href": "viz_tool_dimensions_presentation.html#reusability-live-examples",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "6. Reusability: Live Examples",
+    "text": "6. Reusability: Live Examples\n\n\n\n\n\n\n\n\n\n\n\nSame function, two completely different database schemas - that’s reusability!"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics",
+    "text": "Grammar of Graphics"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#data",
+    "href": "viz_tool_dimensions_presentation.html#data",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Data",
+    "text": "Data\nGraphics start with data\n\n# Load required libraries and data\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(openxlsx)\nlibrary(flextable)\n\n# Load data from an Excel spreadsheet\ndata &lt;- read.xlsx(\"./healthcare cost data.xlsx\")\n\n# View the data\nflextable(head(data))\n\nPatient.CountAgeDiseaseInsurer.CostPatient.%.of.CostPatient.CostPer.Patient.CostTotal.Cost1,4051Acid Reflux3,901,661.80.1685064790,691.763,339.7534,692,353.53042Acid Reflux858,277.70.1709969177,035.323,405.6351,035,313.01423Acid Reflux420,850.90.167017284,382.723,557.983505,233.71074Acid Reflux307,946.40.167047961,758.393,455.185369,704.8985Acid Reflux392,417.40.147309967,793.614,696.030460,211.0936Acid Reflux273,932.50.165479954,319.023,529.586328,251.5"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#aesthetics",
+    "href": "viz_tool_dimensions_presentation.html#aesthetics",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Aesthetics",
+    "text": "Aesthetics"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#mapping",
+    "href": "viz_tool_dimensions_presentation.html#mapping",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Mapping",
+    "text": "Mapping\nHow to map data onto aesthetic attributes of geometric objects\n\nggplot(data, aes(x = Patient.Count, y = Total.Cost))"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#layers",
+    "href": "viz_tool_dimensions_presentation.html#layers",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Layers",
+    "text": "Layers\n\nA graph is made of one or more layers\nEach layer has three parts:\n\nGeometry determines how data are displayed (points, lines, etc.)\nStatistical transformations affect what is displayed"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#geometries",
+    "href": "viz_tool_dimensions_presentation.html#geometries",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Geometries",
+    "text": "Geometries\nDescribe geometries"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#geometries-point",
+    "href": "viz_tool_dimensions_presentation.html#geometries-point",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Geometries: Point",
+    "text": "Geometries: Point\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point()"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#geometries-point-colored-by-disease",
+    "href": "viz_tool_dimensions_presentation.html#geometries-point-colored-by-disease",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Geometries: Point, colored by Disease",
+    "text": "Geometries: Point, colored by Disease\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point(aes(color = Disease))"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#geometries-line-colored-by-disease",
+    "href": "viz_tool_dimensions_presentation.html#geometries-line-colored-by-disease",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Geometries: Line, colored by Disease",
+    "text": "Geometries: Line, colored by Disease\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease))"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#geometries-line-point",
+    "href": "viz_tool_dimensions_presentation.html#geometries-line-point",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Geometries: Line + Point",
+    "text": "Geometries: Line + Point\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease)) +\n  geom_point(aes(color = Disease))"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#scales",
+    "href": "viz_tool_dimensions_presentation.html#scales",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Scales",
+    "text": "Scales\nScales map data values to aesthetic values. Here we change the default color scale used for Disease\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease)) +\n  geom_point(aes(color = Disease)) +\n  scale_color_viridis_d()"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#facets",
+    "href": "viz_tool_dimensions_presentation.html#facets",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Facets",
+    "text": "Facets\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease)) +\n  facet_wrap(~ Disease)"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#facets-without-color-coding",
+    "href": "viz_tool_dimensions_presentation.html#facets-without-color-coding",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Facets (without color coding)",
+    "text": "Facets (without color coding)\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line() +\n  facet_wrap(~ Disease)"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#statistics",
+    "href": "viz_tool_dimensions_presentation.html#statistics",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Statistics",
+    "text": "Statistics\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point(aes(color=Disease)) +\n  geom_line(aes(color=Disease)) +\n  stat_summary(geom=\"line\", fun=\"mean\")"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#coordinates",
+    "href": "viz_tool_dimensions_presentation.html#coordinates",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Coordinates",
+    "text": "Coordinates\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point(aes(color=Disease)) +\n  geom_line(aes(color=Disease)) +\n  stat_summary(geom=\"line\", fun=\"mean\")"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-overview",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-overview",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Overview",
+    "text": "Grammar of Graphics: Overview"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-data",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-data",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Data",
+    "text": "Grammar of Graphics: Data\nGraphics start with data\n\n# Load required libraries and data\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(openxlsx)\n\n# Load data from an Excel spreadsheet\ndata &lt;- read.xlsx(\"./healthcare cost data.xlsx\")\n\n# Round percentage column\ndata$`Patient.%.of.Cost` &lt;- round(data$`Patient.%.of.Cost`, 1)\n\n\n\n\n\n\nPatient.Count\nAge\nDisease\nInsurer.Cost\nPatient.%.of.Cost\nPatient.Cost\nPer.Patient.Cost\nTotal.Cost\n\n\n\n\n1405\n1\nAcid Reflux\n3901661.8\n0.2\n790691.76\n3339.753\n4692353.5\n\n\n304\n2\nAcid Reflux\n858277.7\n0.2\n177035.32\n3405.635\n1035313.0\n\n\n142\n3\nAcid Reflux\n420850.9\n0.2\n84382.72\n3557.983\n505233.7\n\n\n107\n4\nAcid Reflux\n307946.4\n0.2\n61758.39\n3455.185\n369704.8\n\n\n98\n5\nAcid Reflux\n392417.4\n0.1\n67793.61\n4696.030\n460211.0\n\n\n93\n6\nAcid Reflux\n273932.5\n0.2\n54319.02\n3529.586\n328251.5"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-aesthetics",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-aesthetics",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Aesthetics",
+    "text": "Grammar of Graphics: Aesthetics\nAesthetics are the visual properties of geometric objects that can represent data:\n\nPosition: x, y (and z for 3D)\nColor: fill, stroke/outline color\nSize: point size, line width\nShape: point shape, line type\nTransparency: alpha/opacity\nText: labels, annotations\n\nEach aesthetic can be mapped to a variable in your data or set to a constant value."
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-mapping",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-mapping",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Mapping",
+    "text": "Grammar of Graphics: Mapping\nHow to map data onto aesthetic attributes of geometric objects\n\nggplot(data, aes(x = Patient.Count, y = Total.Cost))"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-layers",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-layers",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Layers",
+    "text": "Grammar of Graphics: Layers\n\nA graph is made of one or more layers\nEach layer has three parts:\n\nGeometry determines how data are displayed (points, lines, etc.)\nStatistical transformations affect what is displayed\nPosition adjustment controls how overlapping objects are arranged (stack, dodge, jitter, etc.)"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-geometries",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-geometries",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Geometries",
+    "text": "Grammar of Graphics: Geometries\nGeometries (geoms) are the geometric objects that represent data:\n\nPoints (geom_point) - scatter plots\nLines (geom_line) - line graphs, trends\nBars (geom_bar, geom_col) - bar charts\nAreas (geom_area) - filled areas under curves\nBoxplots (geom_boxplot) - distribution summaries\nText (geom_text, geom_label) - annotations\n\nMultiple geometries can be layered on the same plot to create complex visualizations."
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-geometries-point",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-geometries-point",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Geometries: Point",
+    "text": "Grammar of Graphics: Geometries: Point\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point()"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-geometries-point-colored-by-disease",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-geometries-point-colored-by-disease",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Geometries: Point, colored by Disease",
+    "text": "Grammar of Graphics: Geometries: Point, colored by Disease\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point(aes(color = Disease))"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-geometries-line-colored-by-disease",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-geometries-line-colored-by-disease",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Geometries: Line, colored by Disease",
+    "text": "Grammar of Graphics: Geometries: Line, colored by Disease\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease))"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-geometries-line-point",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-geometries-line-point",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Geometries: Line + Point",
+    "text": "Grammar of Graphics: Geometries: Line + Point\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease)) +\n  geom_point(aes(color = Disease))"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-scales",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-scales",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Scales",
+    "text": "Grammar of Graphics: Scales\nScales map data values to aesthetic values. Here we change the default color scale used for Disease\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease)) +\n  geom_point(aes(color = Disease)) +\n  scale_color_viridis_d()"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-facets",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-facets",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Facets",
+    "text": "Grammar of Graphics: Facets\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line(aes(color = Disease)) +\n  facet_wrap(~ Disease)"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-facets-without-color-coding",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-facets-without-color-coding",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Facets (without color coding)",
+    "text": "Grammar of Graphics: Facets (without color coding)\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_line() +\n  facet_wrap(~ Disease)"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-statistics",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-statistics",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Statistics",
+    "text": "Grammar of Graphics: Statistics\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point(aes(color=Disease)) +\n  geom_line(aes(color=Disease)) +\n  stat_summary(geom=\"line\", fun=\"mean\")"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-coordinates",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-coordinates",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Coordinates",
+    "text": "Grammar of Graphics: Coordinates\nCoordinate systems control how data positions map to the plane of the graphic. Here, we zoom the graph on 0 to 17 year olds.\n\nggplot(data, aes(x = Age, y = Total.Cost)) +\n  geom_point(aes(color=Disease)) +\n  geom_line(aes(color=Disease)) +\n  stat_summary(geom=\"line\", fun=\"mean\") +\n  coord_cartesian(xlim = c(0, 17), ylim = c(0, 5E6))\n\n\nCommon coordinate systems: coord_cartesian() (default), coord_flip() (flip axes), coord_polar() (polar), coord_trans() (transformed scales)"
+  },
+  {
+    "objectID": "viz_tool_dimensions_presentation.html#grammar-of-graphics-overview-wilkinson2005",
+    "href": "viz_tool_dimensions_presentation.html#grammar-of-graphics-overview-wilkinson2005",
+    "title": "A Taxonomy of Visualization Tools",
+    "section": "Grammar of Graphics: Overview (Wilkinson 2005)",
+    "text": "Grammar of Graphics: Overview (Wilkinson 2005)"
   }
 ]

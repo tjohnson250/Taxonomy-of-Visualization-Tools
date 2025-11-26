@@ -14,35 +14,460 @@ bibliography: references.bib
 
 ## Objective
 
-\[Expand to multiple slides visually demonstrating each point\]
+To present a framework of dimensions for categorizing, evaluating, and selecting visualization tools
 
-Visualization tools vary along a number of dimensions, including:
+**Why do we need this?**
 
--   User interface: GUI vs. Declarative
+Visualization tools make fundamentally different trade-offs that affect:
 
--   Expressiveness: Chart libraries vs. more flexible grammar-based tols
+-   How we work with them
+-   What we can create
+-   How we scale our work
 
--   Data requirements: CSV, Excel, JSON, SQL DB, etc.
+Let's examine three critical examples...
 
-These differences reflect fundamental trade-offs in tool design. For instance, chart libraries are easy to use, but have limited expressiveness and flexibility.
+## Example 1: User Interface
 
-Existing taxonomies do not capture all of the relevant dimensions of modern tools
+::::: columns
+::: {.column width="50%"}
+### Excel (GUI)
 
-To present a set of dimensions for categorizing, evaluating, selecting existing visualization tools and proposing new tools
+**Task:** Create sales chart for Q4
 
-## How Do We Choose A Visualization Tool to Use?
+1.  Select data range
+2.  Click "Insert Chart"
+3.  Choose "Column Chart"
+4.  Drag "Month" to X-axis
+5.  Drag "Sales" to Y-axis
+6.  Adjust colors, labels
 
--   There are many different types of visualization tools.
+**Pros:** Immediate visual feedback, no coding
 
--   Visualization tools vary along a number of dimensions
+**Cons:** Manual process for each new dataset
+:::
 
--   No single tool is best on all dimensions due to fundamental tradeoffs
+::: {.column width="50%"}
+### ggplot2 (Declarative)
 
--   Heer and Shneiderman [@heer2019; @heer2012] proposed a taxonomy focused largely on **abstraction level**
+**Same Task:** Create sales chart for Q4
 
--   Modern visualization tools require a more nuanced framework
+``` r
+ggplot(q4_data, aes(x = Month, y = Sales)) +
+  geom_col(fill = "steelblue") +
+  labs(title = "Q4 Sales",
+       x = "Month", y = "Sales ($)")
+```
 
--   I propose **10 dimensions** for comprehensive tool evaluation
+**Pros:** Reusable code, version control, automation
+
+**Cons:** Requires programming knowledge
+:::
+:::::
+
+## User Interface: The Real Impact
+
+**Scenario:** Your company has 50 regional offices
+
+::: incremental
+-   **GUI approach**: Manually create 50 separate charts (hours of repetitive work)
+    -   Any design change? Redo all 50 charts manually
+    -   Quality control? Manually verify each one
+-   **Declarative approach**: Run the same code on 50 datasets (minutes)
+    -   Design change? Update code once, regenerate all 50
+    -   Quality control? Automated and consistent
+-   **The trade-off**: Short-term ease of use vs. long-term scalability
+:::
+
+## Example 2: Expressiveness
+
+::::: columns
+::: {.column width="50%"}
+### Chart Library (Excel)
+
+**Available charts:**
+
+-   Bar/Column
+-   Line
+-   Pie
+-   Scatter
+-   Area
+-   \~20 predefined types
+
+**What if you need:**
+
+-   Custom radial visualization?
+-   Nested treemap with custom interactions?
+-   Parallel coordinates plot?
+
+**Answer:** You can't (without plugins/extensions)
+:::
+
+::: {.column width="50%"}
+### Grammar-based Tool (ggplot2/D3)
+
+**Available charts:** Whatever you can specify
+
+-   All standard chart types
+-   Custom geometries
+-   Novel visualizations
+-   Complex compositions
+
+**Same custom needs?**
+
+**Answer:** Compose from primitives
+
+-   Define custom coordinates
+-   Create custom geoms/marks
+-   Combine layers creatively
+:::
+:::::
+
+## Expressiveness: The Real Impact
+
+**Scenario:** You need to visualize hierarchical data with custom emphasis
+
+**Chart Library Limitation:**
+
+```         
+"We need a sunburst chart with the ability to
+highlight categories and show multiple
+metrics simultaneously."
+
+→ Not available in Excel/standard tools
+→ Wait for vendor to add it?
+→ Switch tools entirely?
+```
+
+**Grammar-based Flexibility:**
+
+``` r
+# Compose exactly what you need
+ggplot(hierarchy_data) +
+  geom_tile(aes(x = level, y = category,
+                fill = primary_metric, alpha = secondary_metric)) +
+  coord_polar() +
+  custom_highlight_layer(paths_to_emphasize)
+```
+
+**The trade-off**: Ease of use vs. creative flexibility
+
+## Expressiveness: Live Example
+
+**Creating a hierarchical radial visualization with ggplot2:**
+
+```{r}
+#| echo: true
+#| output-location: slide
+#| fig-width: 11
+#| fig-height: 11
+library(ggplot2)
+library(dplyr)
+library(ggiraph)
+
+# Create hierarchical product sales data
+products <- data.frame(
+  category = c(rep("Electronics", 6), rep("Furniture", 5),
+               rep("Office", 4), rep("Software", 5), rep("Services", 4)),
+  product = c("Laptops", "Tablets", "Phones", "Monitors", "Cameras", "Headphones",
+              "Desks", "Chairs", "Tables", "Cabinets", "Lamps",
+              "Pens", "Paper", "Staplers", "Binders",
+              "OS", "Productivity", "Design", "Database", "Security",
+              "Consulting", "Training", "Support", "Installation"),
+  revenue = c(450, 320, 580, 210, 180, 95,
+              280, 340, 190, 150, 85,
+              45, 120, 35, 60,
+              380, 290, 250, 420, 340,
+              520, 310, 280, 190),
+  growth = c(15, 22, 8, 12, 18, 25, 18, 25, 10, 5, 12,
+             -2, 8, 3, 7, 28, 32, 22, 19, 24, 35, 18, 22, 15)
+)
+
+# Calculate category-level positions first
+categories <- products %>%
+  group_by(category) %>%
+  summarise(cat_total = sum(revenue), .groups = 'drop') %>%
+  mutate(cat_fraction = cat_total / sum(cat_total),
+         cat_end = cumsum(cat_fraction),
+         cat_start = lag(cat_end, default = 0),
+         mid = (cat_start + cat_end) / 2,
+         tooltip = paste0("<b>", category, "</b><br/>",
+                         "Total Revenue: $", cat_total, "K<br/>",
+                         "Share: ", round(cat_fraction * 100, 1), "%"),
+         data_id = category)
+
+# Calculate product positions within each category
+products <- products %>%
+  left_join(categories %>% select(category, cat_start, cat_end, cat_total),
+            by = "category") %>%
+  group_by(category) %>%
+  mutate(product_fraction = revenue / sum(revenue),
+         prod_end = cat_start + cumsum(product_fraction) * (cat_end - cat_start),
+         prod_start = lag(prod_end, default = first(cat_start)),
+         tooltip = paste0("<b>", product, "</b><br/>",
+                         "Category: ", category, "<br/>",
+                         "Revenue: $", revenue, "K<br/>",
+                         "Growth: ", growth, "%"),
+         data_id = category,
+         onclick = paste0("alert('", product, ": $", revenue, "K')")) %>%
+  ungroup()
+
+# Plot interactive sunburst
+p <- ggplot() +
+  # Inner ring - Categories (interactive)
+  geom_rect_interactive(data = categories,
+            aes(xmin = 1, xmax = 2, ymin = cat_start, ymax = cat_end,
+                fill = cat_total,
+                tooltip = tooltip,
+                data_id = data_id),
+            color = "white", linewidth = 1.5) +
+  # Outer ring - Products (interactive)
+  geom_rect_interactive(data = products,
+            aes(xmin = 2, xmax = 3, ymin = prod_start, ymax = prod_end,
+                fill = revenue, alpha = growth/50,
+                tooltip = tooltip,
+                data_id = data_id),
+            color = "white", linewidth = 0.8) +
+  # Category labels
+  geom_text(data = categories,
+            aes(x = 1.5, y = mid, label = category),
+            size = 3.5, fontface = "bold", color = "white") +
+  # Product labels
+  geom_text(data = products,
+            aes(x = 3.2, y = (prod_start + prod_end)/2, label = product),
+            size = 2.2, hjust = 0, color = "gray20") +
+  scale_fill_gradient2(low = "lightblue", mid = "steelblue", high = "navy",
+                       midpoint = 250, name = "Revenue ($K)") +
+  scale_alpha_continuous(range = c(0.5, 1), guide = "none") +
+  coord_polar(theta = "y") +
+  xlim(0, 4) +
+  theme_void() +
+  theme(legend.position = "right",
+        plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 11)) +
+  labs(title = "Company Sales by Category and Product (Interactive Sunburst)",
+       subtitle = "Hover for details and to highlight a category")
+
+# Create interactive plot
+girafe(ggobj = p, width_svg = 11, height_svg = 11,
+       options = list(
+         opts_hover(css = "fill:orange;stroke:black;stroke-width:2px;"),
+         opts_selection(type = "multiple", css = "fill:orange;stroke:black;stroke-width:2px;"),
+         opts_tooltip(css = "background-color:white;padding:10px;border-radius:5px;box-shadow:3px 3px 5px rgba(0,0,0,0.3);")
+       ))
+```
+
+**This demonstrates:** Composing custom visualizations from grammar primitives
+
+## Example 3: Data Requirements
+
+### Tool A: Excel/Google Sheets
+
+**Data workflow:**
+
+1.  Export database query to CSV
+2.  Download CSV file
+3.  Open in Excel
+4.  Create visualization
+5.  **Data updated?** Repeat steps 1-4
+
+**Supported formats:** CSV, Excel, manual entry
+
+------------------------------------------------------------------------
+
+### Tool B: Tableau
+
+**Data workflow:**
+
+1.  Connect directly to SQL database (or other DBs, CSV, Excel, etc)
+2.  Select tables (supports joins, unions, etc)
+3.  Create visualization (can create new calculations, blends, etc. without changing source data)
+4.  **Data updated?** Click refresh
+
+**Supported formats:** Databases, cloud services, files, APIs
+
+------------------------------------------------------------------------
+
+### Tool C: R + ggplot2
+
+**Data workflow: Flexible. Data source neutral. Sample SQL DB Connection:**
+
+```{r}
+#| echo: true
+#| eval: false
+library(DBI)
+library(RSQLite)
+library(ggplot2)
+library(dplyr)
+
+# 1. Create an in-memory SQLite database
+con <- dbConnect(RSQLite::SQLite(), ":memory:")
+
+# 2. Create and populate a sales table
+dbExecute(con, "CREATE TABLE sales (month TEXT, region TEXT,
+                                    revenue INTEGER, units INTEGER)")
+
+# Insert sample data
+sales_data <- data.frame(
+  month = rep(c("Jan", "Feb", "Mar", "Apr", "May", "Jun"), each = 3),
+  region = rep(c("North", "South", "West"), 6),
+  revenue = c(450, 380, 520, 480, 420, 560, 510, 460, 590,
+              530, 490, 610, 560, 520, 640, 590, 550, 670),
+  units = c(45, 38, 52, 48, 42, 56, 51, 46, 59,
+            53, 49, 61, 56, 52, 64, 59, 55, 67)
+)
+dbWriteTable(con, "sales", sales_data, append = TRUE)
+
+# 3. Query the database
+query <- "SELECT region, month, revenue, units FROM sales
+          WHERE revenue > 400 ORDER BY month, region"
+data <- dbGetQuery(con, query)
+
+# 4. Create visualization directly from database query
+ggplot(data, aes(x = factor(month,
+                levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun")),
+                 y = revenue, fill = region)) +
+  geom_col(position = "dodge") +
+  geom_text(aes(label = paste0("$", revenue, "K")),
+            position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  scale_fill_manual(values = c("North" = "steelblue", "South" = "coral",
+                               "West" = "seagreen")) +
+  labs(title = "Regional Sales Performance (Revenue > $400K)",
+       x = "Month", y = "Revenue ($K)", fill = "Region") +
+  theme_minimal()
+
+dbDisconnect(con)
+```
+
+**Supported formats:** Any database, API, file format, or data source accessible via code
+
+------------------------------------------------------------------------
+
+## Tool C: R + ggplot + SQL Result
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 6
+library(DBI)
+library(RSQLite)
+library(ggplot2)
+library(dplyr)
+
+con <- dbConnect(RSQLite::SQLite(), ":memory:")
+dbExecute(con, "CREATE TABLE sales (month TEXT, region TEXT, revenue INTEGER, units INTEGER)")
+sales_data <- data.frame(
+  month = rep(c("Jan", "Feb", "Mar", "Apr", "May", "Jun"), each = 3),
+  region = rep(c("North", "South", "West"), 6),
+  revenue = c(450, 380, 520, 480, 420, 560, 510, 460, 590,
+              530, 490, 610, 560, 520, 640, 590, 550, 670),
+  units = c(45, 38, 52, 48, 42, 56, 51, 46, 59,
+            53, 49, 61, 56, 52, 64, 59, 55, 67)
+)
+dbWriteTable(con, "sales", sales_data, append = TRUE)
+query <- "SELECT region, month, revenue, units FROM sales WHERE revenue > 400 ORDER BY month, region"
+data <- dbGetQuery(con, query)
+
+ggplot(data, aes(x = factor(month, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun")),
+                 y = revenue, fill = region)) +
+  geom_col(position = "dodge") +
+  geom_text(aes(label = paste0("$", revenue, "K")),
+            position = position_dodge(width = 0.9),
+            vjust = -0.5, size = 3) +
+  scale_fill_manual(values = c("North" = "steelblue",
+                               "South" = "coral",
+                               "West" = "seagreen")) +
+  labs(title = "Regional Sales Performance (Revenue > $400K)",
+       subtitle = "Data queried directly from in-memory SQLite database",
+       x = "Month", y = "Revenue ($K)", fill = "Region") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", size = 14),
+        legend.position = "top")
+
+dbDisconnect(con)
+```
+
+## Data Requirements: The Real Impact
+
+**Scenario:** Weekly sales dashboard from live database
+
+<div>
+
+-   **CSV Export approach** (Excel basic):
+    -   Manual export every week
+    -   Risk of using outdated data
+    -   Multiple files to manage
+    -   Time: \~30 minutes/week
+-   **Direct connection** (Tableau Server/Power BI):
+    -   Automated Pipeline, Can combine multiple sources
+    -   Always current data
+    -   No manual steps
+    -   Time: \~0 minutes/week (after setup)
+-   **Programmatic access** (Python/R):
+    -   Automated pipeline, Can combine multiple sources
+    -   Can add custom transformations and visualizations
+    -   Time: \~0 minutes/week (after pipeline setup)
+
+</div>
+
+**The trade-off**: Simplicity vs. data integration capabilities
+
+## Why These Differences Matter
+
+These three examples illustrate fundamental trade-offs:
+
+1.  **Interface Paradigm**: Immediate productivity vs. long-term scalability
+2.  **Expressiveness**: Ease of use vs. customizability
+3.  **Data Abstraction**: Simple setup vs. powerful integration
+
+**The key insight:** Different projects have different needs
+
+-   One-time analysis → GUI tools excel
+-   Repeated analysis (or reproducibility)→ Declarative tools excel
+-   Standard charts → Chart libraries excel
+-   Novel visualizations → Grammars excel
+-   Simple data → Manual import works
+-   Complex data pipelines → Direct connections essential
+
+**We need a comprehensive framework to understand all these trade-offs**
+
+## Heer's Original Taxonomy [@heer2012; @heer2019]
+
+::: {style="text-align: center;"}
+```{mermaid}
+%%| fig-width: 8
+%%| fig-height: 6
+flowchart TB
+    A["Graphics APIs<br/>(Processing, OpenGL)"]
+    B["Component Architectures<br/>(Prefuse, VTK)"]
+    C["Visualization Grammars<br/>(D3.js, Protovis)"]
+    D["Visual Analysis Grammars<br/>(ggplot2, Tableau)"]
+    E["Chart Libraries<br/>(Excel, Plotly Express)"]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+
+    
+```
+:::
+
+**Primarily reflects:** Abstraction Level (and Ease of Use) + Expressiveness
+
+## Beyond Heer: Why More Dimensions?
+
+**Example: Tableau vs. ggplot2**
+
+-   Both are at the same **Abstraction Level** (Visual Analysis Grammars in Heer's taxonomy)
+-   Both have **Theoretical Foundations** (VizQL vs. Grammar of Graphics)
+-   **But they differ across multiple other dimensions:**
+    -   **Ease of Use**: Tableau (high) vs. ggplot2 (medium - requires programming)
+    -   **Expressiveness**: Tableau (high) vs. ggplot2 (higher - can drop to graphic primitives)
+    -   **Reusability**: Tableau (low - manual GUI) vs. ggplot2 (high - code templates)
+    -   **Interface Paradigm**: Tableau (GUI drag-and-drop) vs. ggplot2 (declarative code)
+    -   **Cost**: Tableau (commercial) vs. ggplot2 (free/open-source)
+
+**Note:** While Tableau sometimes allows custom visualizations (e.g., Sankey plots), accessing primitives is much harder and more limited than in ggplot2
 
 ## The Ten Dimensions
 
@@ -88,204 +513,1021 @@ To present a set of dimensions for categorizing, evaluating, selecting existing 
 
 -   **Cost**: Overall cost to use the tool and disseminate viualizations
 
-## Heer's Original Taxonomy[@heer2012]
+## Exploring Each Dimension
 
-```         
-Graphics APIs (Processing, OpenGL)
-    ↓
-Component Architectures (Prefuse, VTK)
-    ↓
-Visualization Grammars (D3.js, Protovis)
-    ↓
-Visual Analysis Grammars (ggplot2, Tableau)
-    ↓
-Chart Libraries (Excel, Plotly Express)
+Let's examine each of the 10 dimensions in detail with concrete examples...
+
+## 1. Abstraction Level
+
+**Definition:** How much of the visualization pipeline is handled automatically
+
+::::: columns
+::: {.column width="50%"}
+### Low Abstraction (OpenGL/Processing)
+
+``` java
+// Manually handle every pixel
+for (int i = 0; i < dataPoints; i++) {
+  float x = map(data[i].x, minX, maxX, 0, width);
+  float y = map(data[i].y, minY, maxY, height, 0);
+  ellipse(x, y, 5, 5);
+}
+// Must handle: scaling, coordinate systems,
+// rendering, colors, legends, axes...
 ```
 
-**Primarily reflects:** Abstraction Level + Ease of Use
+**You control:** Everything
 
-## Beyond Heer: Why More Dimensions?
+**You must specify:** Everything
+:::
 
-**Example: Tableau vs. ggplot2**
+::: {.column width="50%"}
+### High Abstraction (Excel/Tableau)
 
--   Both have high **Ease of Use** (relatively)
--   Both have high **Expressiveness**
--   **But they differ dramatically in:**
-    -   **Reusability** (low vs. high)
-    -   **Interface Paradigm** (GUI vs. declarative)
-    -   **Theoretical Foundation** (pragmatic vs. Grammar of Graphics)
+1.  Select data
+2.  Click "Insert Chart" or "Show Me"
+3.  Choose chart type
+4.  Done
 
-## Declarative Systems Overview
+**Automatic:** Scales, axes, colors, legends, layout
 
-**Code-based specification** enables:
+**Trade-off:** Less control, faster creation
+:::
+:::::
 
--   **Reproducibility**: Version control, automation
--   **Reusability**: Templates applicable across datasets\
--   **Theoretical rigor**: Systematic approaches
--   **Programmatic generation**: Automated report creation
+## 2. Expressiveness
 
-Let's examine three declarative approaches...
-
-## ggplot2: Grammar of Graphics
-
-**Theoretical Foundation:** Wilkinson's Grammar of Graphics
+**Definition:** The range of visual designs and customizations possible
 
 ```{r}
 #| echo: true
-#| eval: false
+#| output-location: slide
+#| fig-width: 10
+#| fig-height: 6
 library(ggplot2)
 
-# Basic scatter plot
-ggplot(mtcars, aes(x = wt, y = mpg)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  facet_wrap(~cyl) +
-  labs(title = "Fuel Efficiency by Weight and Cylinders",
-       x = "Weight (1000 lbs)", 
-       y = "Miles per Gallon") +
-  theme_minimal()
+# Create sample data
+data <- data.frame(
+  x = rep(1:10, 3),
+  y = c(rnorm(10, 5, 1), rnorm(10, 8, 1.5), rnorm(10, 6, 0.8)),
+  group = rep(c("A", "B", "C"), each = 10)
+)
+
+# High expressiveness: custom annotation layer
+ggplot(data, aes(x = x, y = y, color = group)) +
+  geom_point(size = 3, alpha = 0.6) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1.5) +
+  annotate("rect", xmin = 5, xmax = 8, ymin = 4, ymax = 10,
+           alpha = 0.1, fill = "red") +
+  annotate("text", x = 6.5, y = 9.5, label = "Region of Interest",
+           size = 4, fontface = "bold") +
+  scale_color_manual(values = c("A" = "#e74c3c", "B" = "#3498db", "C" = "#2ecc71")) +
+  labs(title = "Custom Composite Visualization",
+       subtitle = "Combining points, smoothers, annotations, and custom styling") +
+  theme_minimal() +
+  theme(legend.position = "top",
+        plot.title = element_text(face = "bold", size = 16))
 ```
 
-**Grammar Components:** Data + Aesthetics + Geometries + Statistics + Coordinates + Facets
+## 3. Ease of Use
 
-## ggplot2: Reusability Example
+**Definition:** How quickly users can become productive
+
+| Tool        | Learning Curve | First Chart | Complex Chart |
+|-------------|----------------|-------------|---------------|
+| **Excel**   | Hours          | Minutes     | Hours         |
+| **Tableau** | Days           | Minutes     | Hours         |
+| **ggplot2** | Weeks          | Hours       | Days          |
+| **D3.js**   | Months         | Days        | Weeks         |
+| **OpenGL**  | Months+        | Weeks       | Months        |
+
+**Key insight:** Ease of use inversely correlates with expressiveness and control
+
+## 4. Interaction Capabilities
+
+```{r, echo=FALSE}
+library(reticulate)
+py_require("altair")
+alt = import("altair")
+
+py_require("vega_datasets")
+vd = import("vega_datasets")
+```
+
+**Definition:** Sophistication of filtering, linking, and dynamic behaviors
+
+::::: columns
+::: {.column width="50%"}
+### Limited (ggplot2/static)
+
+-   Hover tooltips (with packages)
+-   Basic click events
+-   Mostly static output
+
+### High (Tableau)
+
+-   Drag-to-filter
+-   Cross-chart filtering
+-   Parameter controls
+-   Dashboard actions
+:::
+
+::: {.column width="50%"}
+### Maximum (D3.js/Vega-Lite)
+
+-   Custom event handlers
+-   Coordinated multiple views
+-   Animated transitions
+-   Real-time data updates
+-   Programmatic control over everything
+:::
+:::::
+
+**Example we saw earlier:** Interactive sunburst chart with ggiraph
+
+## 4. Interaction Capabilities: D3.js
+
+**Explore the D3.js data visualization library:**
+
+```{=html}
+<iframe width="100%" height="800" src="https://d3js.org/" title="D3.js Website"></iframe>
+```
+
+## 4. Interaction Capabilities: D3.js Example
+
+**Brush selection with cross-filtering:**
+
+```{=html}
+<div style="display: flex; gap: 20px;">
+  <div id="d3-scatter"></div>
+  <div id="d3-bars"></div>
+</div>
+
+<script>
+// Use D3 that's already loaded by ggiraph - no need to load D3 v7
+setTimeout(function() {
+// Car data (subset for demo)
+const cars = [
+  {Horsepower: 130, Miles_per_Gallon: 18, Origin: "USA"},
+  {Horsepower: 165, Miles_per_Gallon: 15, Origin: "USA"},
+  {Horsepower: 150, Miles_per_Gallon: 18, Origin: "USA"},
+  {Horsepower: 150, Miles_per_Gallon: 16, Origin: "USA"},
+  {Horsepower: 140, Miles_per_Gallon: 17, Origin: "USA"},
+  {Horsepower: 198, Miles_per_Gallon: 15, Origin: "USA"},
+  {Horsepower: 220, Miles_per_Gallon: 14, Origin: "USA"},
+  {Horsepower: 215, Miles_per_Gallon: 14, Origin: "USA"},
+  {Horsepower: 225, Miles_per_Gallon: 14, Origin: "USA"},
+  {Horsepower: 190, Miles_per_Gallon: 15, Origin: "USA"},
+  {Horsepower: 97, Miles_per_Gallon: 24, Origin: "Europe"},
+  {Horsepower: 88, Miles_per_Gallon: 27, Origin: "Europe"},
+  {Horsepower: 46, Miles_per_Gallon: 26, Origin: "Europe"},
+  {Horsepower: 87, Miles_per_Gallon: 25, Origin: "Europe"},
+  {Horsepower: 90, Miles_per_Gallon: 24, Origin: "Europe"},
+  {Horsepower: 113, Miles_per_Gallon: 25, Origin: "Europe"},
+  {Horsepower: 97, Miles_per_Gallon: 26, Origin: "Japan"},
+  {Horsepower: 97, Miles_per_Gallon: 31, Origin: "Japan"},
+  {Horsepower: 110, Miles_per_Gallon: 32, Origin: "Japan"},
+  {Horsepower: 107, Miles_per_Gallon: 28, Origin: "Japan"},
+  {Horsepower: 86, Miles_per_Gallon: 30, Origin: "Japan"}
+];
+
+const margin = {top: 20, right: 20, bottom: 50, left: 70};
+const width = 380 - margin.left - margin.right;
+const height = 280 - margin.top - margin.bottom;
+
+// Color scale
+const colorScale = d3.scaleOrdinal()
+  .domain(["USA", "Europe", "Japan"])
+  .range(["#e74c3c", "#3498db", "#2ecc71"]);
+
+// SCATTER PLOT
+const scatterSvg = d3.select("#d3-scatter")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", `translate(${margin.left},${margin.top})`);
+
+const xScale = d3.scaleLinear()
+  .domain([40, 230])
+  .range([0, width]);
+
+const yScale = d3.scaleLinear()
+  .domain([10, 35])
+  .range([height, 0]);
+
+scatterSvg.append("g")
+  .attr("transform", `translate(0,${height})`)
+  .call(d3.axisBottom(xScale));
+
+scatterSvg.append("g")
+  .call(d3.axisLeft(yScale));
+
+scatterSvg.append("text")
+  .attr("x", width / 2)
+  .attr("y", height + 40)
+  .style("text-anchor", "middle")
+  .text("Horsepower");
+
+scatterSvg.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("x", -height / 2)
+  .attr("y", -45)
+  .style("text-anchor", "middle")
+  .text("MPG");
+
+const circles = scatterSvg.selectAll("circle")
+  .data(cars)
+  .join("circle")
+  .attr("cx", d => xScale(d.Horsepower))
+  .attr("cy", d => yScale(d.Miles_per_Gallon))
+  .attr("r", 5)
+  .attr("fill", d => colorScale(d.Origin))
+  .attr("opacity", 0.7);
+
+// Custom brush event handler
+const brush = d3.brush()
+  .extent([[0, 0], [width, height]])
+  .on("brush", brushed)
+  .on("end", brushed);
+
+scatterSvg.append("g")
+  .attr("class", "brush")
+  .call(brush);
+
+// BAR CHART (with extra top margin for title)
+const barMargin = {top: 35, right: 20, bottom: 50, left: 70};
+const barSvg = d3.select("#d3-bars")
+  .append("svg")
+  .attr("width", width + barMargin.left + barMargin.right)
+  .attr("height", height + barMargin.top + barMargin.bottom)
+  .append("g")
+  .attr("transform", `translate(${barMargin.left},${barMargin.top})`);
+
+const yBarScale = d3.scaleBand()
+  .domain(["USA", "Europe", "Japan"])
+  .range([0, height])
+  .padding(0.2);
+
+const xBarScale = d3.scaleLinear()
+  .domain([0, 12])
+  .range([0, width]);
+
+barSvg.append("g")
+  .call(d3.axisLeft(yBarScale));
+
+barSvg.append("g")
+  .attr("transform", `translate(0,${height})`)
+  .call(d3.axisBottom(xBarScale));
+
+barSvg.append("text")
+  .attr("x", width / 2)
+  .attr("y", height + 40)
+  .style("text-anchor", "middle")
+  .text("Count");
+
+// Add title
+barSvg.append("text")
+  .attr("x", width / 2)
+  .attr("y", -15)
+  .style("text-anchor", "middle")
+  .style("font-weight", "bold")
+  .text("Count by Origin");
+
+function updateBars(filteredData) {
+  // Count manually to avoid d3.rollup (not available in older D3)
+  const counts = {};
+  filteredData.forEach(d => {
+    counts[d.Origin] = (counts[d.Origin] || 0) + 1;
+  });
+
+  const barData = ["USA", "Europe", "Japan"].map(origin => ({
+    origin: origin,
+    count: counts[origin] || 0
+  }));
+
+  const bars = barSvg.selectAll(".bar")
+    .data(barData, d => d.origin);
+
+  bars.transition()
+    .duration(200)
+    .attr("width", d => xBarScale(d.count));
+}
+
+function brushed() {
+  // Use d3.brushSelection to get the current brush selection
+  const selection = d3.brushSelection(this);
+
+  if (!selection) {
+    // No selection - show all
+    scatterSvg.selectAll("circle")
+      .attr("fill", d => colorScale(d.Origin));
+    updateBars(cars);
+    return;
+  }
+
+  // Filter points within brush
+  const [[x0, y0], [x1, y1]] = selection;
+
+  const filtered = cars.filter(d => {
+    const x = xScale(d.Horsepower);
+    const y = yScale(d.Miles_per_Gallon);
+    return x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  });
+
+  // Update point colors
+  scatterSvg.selectAll("circle")
+    .attr("fill", d => {
+      const x = xScale(d.Horsepower);
+      const y = yScale(d.Miles_per_Gallon);
+      const inBrush = x >= x0 && x <= x1 && y >= y0 && y <= y1;
+      return inBrush ? colorScale(d.Origin) : "lightgray";
+    });
+
+  // Update bar chart
+  updateBars(filtered);
+}
+
+// Initial bar chart - create bars with actual data
+const initialCounts = [
+  {origin: "USA", count: 10},
+  {origin: "Europe", count: 6},
+  {origin: "Japan", count: 5}
+];
+
+barSvg.selectAll(".bar")
+  .data(initialCounts)
+  .enter()
+  .append("rect")
+  .attr("class", "bar")
+  .attr("x", 0)
+  .attr("y", d => yBarScale(d.origin))
+  .attr("width", d => xBarScale(d.count))
+  .attr("height", yBarScale.bandwidth())
+  .attr("fill", d => colorScale(d.origin))
+  .attr("stroke", "#333")
+  .attr("stroke-width", 1);
+
+}, 100); // End setTimeout
+</script>
+```
+
+**Requires \~100+ lines of custom JavaScript** for brush handling, filtering, and coordinated updates.
+
+This took multiple rounds of prompting in Claude Code plus debugging in the Chrome console to get right. Estimated time: \~ 30 minutes.
+
+Most visualization packages lack appropriate interaction abstractions making them hard for humans and AI to use.
+
+## 4. Interaction Capabilities: D3.js Code
+
+**Brush selection with cross-filtering (66 lines of JavaScript):**
+
+``` javascript
+// Setup scales, axes, and SVG containers
+const margin = {top: 20, right: 20, bottom: 50, left: 70};
+const width = 380 - margin.left - margin.right;
+const height = 280 - margin.top - margin.bottom;
+
+const scatterSvg = d3.select("#d3-scatter")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", `translate(${margin.left},${margin.top})`);
+
+// Create brush for selection
+const brush = d3.brush()
+  .extent([[0, 0], [width, height]])
+  .on("brush", brushed)
+  .on("end", brushed);
+
+scatterSvg.append("g").attr("class", "brush").call(brush);
+
+// Custom event handler for brush interaction
+function brushed() {
+  const selection = d3.brushSelection(this);
+  if (!selection) {
+    scatterSvg.selectAll("circle")
+      .attr("fill", d => colorScale(d.Origin));
+    updateBars(cars);
+    return;
+  }
+
+  const [[x0, y0], [x1, y1]] = selection;
+  const filtered = cars.filter(d => {
+    const x = xScale(d.Horsepower);
+    const y = yScale(d.Miles_per_Gallon);
+    return x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  });
+
+  scatterSvg.selectAll("circle")
+    .attr("fill", d => {
+      const x = xScale(d.Horsepower);
+      const y = yScale(d.Miles_per_Gallon);
+      const inBrush = x >= x0 && x <= x1 && y >= y0 && y <= y1;
+      return inBrush ? colorScale(d.Origin) : "lightgray";
+    });
+
+  updateBars(filtered);
+}
+
+// Update bar chart based on filtered data
+function updateBars(filteredData) {
+  const counts = {};
+  filteredData.forEach(d => {
+    counts[d.Origin] = (counts[d.Origin] || 0) + 1;
+  });
+
+  const barData = ["USA", "Europe", "Japan"].map(origin => ({
+    origin: origin,
+    count: counts[origin] || 0
+  }));
+
+  barSvg.selectAll(".bar")
+    .data(barData, d => d.origin)
+    .transition()
+    .duration(200)
+    .attr("width", d => xBarScale(d.count));
+}
+```
+
+::: {style="font-size: 0.8em; margin-top: 1em;"}
+**Note:** Total implementation requires \~150 lines including data setup, scale creation, axes, and SVG configuration
+:::
+
+## 4. Interaction Capabilities: Vega-Lite
+
+**Explore the Vega-Lite visualization grammar:**
+
+```{=html}
+<iframe width="100%" height="800" src="https://vega.github.io/vega-lite/" title="Vega-Lite Website"></iframe>
+```
+
+## 4. Live Vega-Lite Interaction
+
+```{python}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 5
+import altair as alt
+from vega_datasets import data
+
+# Load cars dataset
+cars = data.cars()
+
+# Create a brush selection
+brush = alt.selection_interval(name='brush')
+
+# Scatter plot with brush selection
+scatter = alt.Chart(cars).mark_point().encode(
+    x=alt.X('Horsepower:Q', scale=alt.Scale(zero=False)),
+    y=alt.Y('Miles_per_Gallon:Q', scale=alt.Scale(zero=False)),
+    color=alt.condition(brush, 'Origin:N', alt.value('lightgray')),
+    size=alt.value(60)
+).properties(
+    width=400,
+    height=300,
+    title='Select cars by dragging on the scatter plot'
+).add_params(brush)
+
+# Bar chart filtered by brush selection
+bars = alt.Chart(cars).mark_bar().encode(
+    x='count():Q',
+    y='Origin:N',
+    color='Origin:N'
+).transform_filter(
+    brush
+).properties(
+    width=400,
+    height=300,
+    title='Count of selected cars by origin'
+)
+
+# Combine side-by-side
+scatter | bars
+```
+
+**Try it:** Drag to select points on the scatter plot and watch the bar chart update!
+
+## 4. Interaction Capabilities: Vega-Lite Example
+
+**Cross-filtering with brush selection:**
+
+```{python}
+#| echo: true
+#| eval: false
+import altair as alt
+from vega_datasets import data
+
+# Load cars dataset
+cars = data.cars()
+
+# Create a brush selection
+brush = alt.selection_interval(name='brush')
+
+# Scatter plot with brush selection
+scatter = alt.Chart(cars).mark_point().encode(
+    x=alt.X('Horsepower:Q', scale=alt.Scale(zero=False)),
+    y=alt.Y('Miles_per_Gallon:Q', scale=alt.Scale(zero=False)),
+    color=alt.condition(brush, 'Origin:N', alt.value('lightgray')),
+    size=alt.value(60)
+).properties(
+    width=400,
+    height=300,
+    title='Select cars by dragging on the scatter plot'
+).add_params(brush)
+
+# Bar chart filtered by brush selection
+bars = alt.Chart(cars).mark_bar().encode(
+    x='count():Q',
+    y='Origin:N',
+    color='Origin:N'
+).transform_filter(
+    brush
+).properties(
+    width=400,
+    height=300,
+    title='Count of selected cars by origin'
+)
+
+# Combine side-by-side
+scatter | bars
+```
+
+**Demonstrates:** Declarative interaction specification - no custom event handlers needed!
+
+------------------------------------------------------------------------
+
+## 5. Data Abstraction
+
+**Definition:** Ability to connect to diverse data sources. Also: ability to create visualizations without modifying original data source
+
+**Level 1: Manual Entry Only** - Excel (basic), Google Sheets - Copy-paste or type data
+
+**Level 2: File Import** - Excel (advanced), most GUI tools - CSV, JSON, Excel files
+
+**Level 3: Direct Database Connection** - Tableau, Power BI, R/Python - SQL databases, cloud services
+
+**Level 4: Programmatic Access** - R/Python with packages - APIs, web scraping, streaming data, any custom source
+
+**Important Limitations:**
+
+-   **Browser-based JavaScript libraries** (D3.js, Vega-Lite, Protovis) only work with JavaScript data structures - require data preprocessed to JSON/arrays
+-   **Graphics APIs** (Processing, OpenGL, Java2D) work with in-memory data only - no native database connectivity
+-   These tools require external data pipelines or preprocessing to connect to databases
+
+## 6. Reusability
+
+**Definition:** How easily visualization logic can be applied to new datasets
 
 ```{r}
 #| echo: true
 #| eval: false
-# Template function - highly reusable
-create_efficiency_plot <- function(data, x_var, y_var, group_var) {
-  ggplot(data, aes(x = !!sym(x_var), y = !!sym(y_var))) +
-    geom_point(aes(color = !!sym(group_var))) +
-    geom_smooth(method = "lm") +
-    facet_wrap(vars(!!sym(group_var))) +
-    theme_minimal()
-}
+library(DBI)
+library(RSQLite)
+library(visNetwork)
 
-# Apply to different datasets
-create_efficiency_plot(mtcars, "wt", "mpg", "cyl")
-create_efficiency_plot(clinical_data, "age", "response", "treatment")
-create_efficiency_plot(sales_data, "price", "units", "region")
-```
+# Create a REUSABLE database schema visualization function
+visualize_db_schema <- function(db_conn, title) {
+  # Get all tables
+  tables <- dbListTables(db_conn)
 
-**High Reusability:** Same logic, different data sources
+  # Create nodes (one per table)
+  nodes <- data.frame(
+    id = tables,
+    label = tables,
+    title = sapply(tables, function(t) {
+      cols <- dbListFields(db_conn, t)
+      paste0("<b>", t, "</b><br>Columns: ", paste(cols, collapse=", "))
+    }),
+    color = "#97C2FC",
+    shape = "box"
+  )
 
-## D3.js: Data-Driven Documents
-
-**Theoretical Foundation:** Data-join paradigm
-
-```{javascript}
-// D3.js scatter plot
-const svg = d3.select("body").append("svg")
-    .attr("width", 500).attr("height", 400);
-
-const xScale = d3.scaleLinear()
-    .domain(d3.extent(data, d => d.weight))
-    .range([50, 450]);
-
-const yScale = d3.scaleLinear()
-    .domain(d3.extent(data, d => d.mpg))
-    .range([350, 50]);
-
-svg.selectAll("circle")
-    .data(data)
-    .join("circle")
-    .attr("cx", d => xScale(d.weight))
-    .attr("cy", d => yScale(d.mpg))
-    .attr("r", 5);
-```
-
-## D3.js: Interaction Capabilities
-
-```{javascript}
-// Cross-filtering interaction
-svg.selectAll("circle")
-    .data(data)
-    .join("circle")
-    .attr("cx", d => xScale(d.weight))
-    .attr("cy", d => yScale(d.mpg))
-    .attr("r", 5)
-    .on("click", function(event, d) {
-        // Filter other charts based on selection
-        updateHistogram(data.filter(item => item.cyl === d.cyl));
-        updateBarChart(data.filter(item => item.cyl === d.cyl));
-        
-        // Highlight selection
-        d3.selectAll("circle").style("opacity", 0.3);
-        d3.select(this).style("opacity", 1);
-    });
-```
-
-**High Interaction Capabilities:** Programmatic control over all interactions
-
-## Vega-Lite: Grammar of Interactive Graphics
-
-**Theoretical Foundation:** Grammar + Selection model
-
-```{json}
-{
-  "data": {"url": "cars.json"},
-  "mark": "circle",
-  "encoding": {
-    "x": {"field": "weight", "type": "quantitative"},
-    "y": {"field": "mpg", "type": "quantitative"},
-    "color": {"field": "cylinders", "type": "nominal"}
-  },
-  "selection": {
-    "brush": {"type": "interval"}
-  },
-  "transform": [
-    {"filter": {"selection": "brush"}}
-  ]
-}
-```
-
-**Combines:** Declarative grammar + Built-in interaction patterns
-
-## Vega-Lite: Cross-filtering
-
-```{json}
-{
-  "data": {"url": "cars.json"},
-  "vconcat": [
-    {
-      "mark": "circle",
-      "encoding": {
-        "x": {"field": "weight", "type": "quantitative"},
-        "y": {"field": "mpg", "type": "quantitative"},
-        "color": {"condition": {"selection": "brush", "value": "red"}, 
-                  "value": "grey"}
-      },
-      "selection": {"brush": {"type": "interval"}}
-    },
-    {
-      "mark": "bar",
-      "encoding": {
-        "x": {"field": "cylinders", "type": "nominal"},
-        "y": {"aggregate": "count", "type": "quantitative"}
-      },
-      "transform": [{"filter": {"selection": "brush"}}]
+  # Find relationships (foreign keys)
+  edges <- data.frame(from = character(), to = character(), title = character())
+  for(table in tables) {
+    fks <- dbGetQuery(db_conn, paste0("PRAGMA foreign_key_list(", table, ")"))
+    if(nrow(fks) > 0) {
+      for(i in 1:nrow(fks)) {
+        edge_info <- paste0("<b>", table, ".", fks$from[i], "</b> → <b>",
+                           fks$table[i], ".", fks$to[i], "</b>")
+        edges <- rbind(edges, data.frame(from = table, to = fks$table[i],
+                                         title = edge_info))
+      }
     }
-  ]
+  }
+
+  visNetwork(nodes, edges, main = title) %>%
+    visEdges(arrows = "to", color = list(color = "#848484")) %>%
+    visOptions(highlightNearest = TRUE)
 }
 ```
 
-## Comparing Declarative Systems
+**Same function works with ANY database - just pass different connections!**
 
-| Dimension                    | ggplot2     | D3.js       | Vega-Lite   |
-|------------------------------|-------------|-------------|-------------|
-| **Abstraction Level**        | High        | Low         | High        |
-| **Expressiveness**           | High        | Highest     | High        |
-| **Ease of Use**              | Medium      | Low         | Medium      |
-| **Interaction Capabilities** | Low         | Highest     | High        |
-| **Data Abstraction**         | Medium      | Low         | Low         |
-| **Reusability**              | Highest     | High        | High        |
-| **Interface Paradigm**       | Declarative | Declarative | Declarative |
-| **Theoretical Foundation**   | Strong      | Strong      | Strong      |
+**Reusability Spectrum:** **Low:** Tableau workbooks (must recreate manually) • **Medium:** Excel templates (some automation) • **High:** Code-based tools (ggplot2, D3.js)
+
+## 6. Reusability: Live Examples
+
+```{r}
+#| echo: false
+library(DBI)
+library(RSQLite)
+library(visNetwork)
+library(htmltools)
+
+# Define the reusable visualization function (without tooltips)
+visualize_db_schema <- function(db_conn, title) {
+  tables <- dbListTables(db_conn)
+
+  # Create nodes
+  nodes <- data.frame(
+    id = tables,
+    label = tables,
+    color = "#97C2FC",
+    shape = "box"
+  )
+
+  # Find relationships (foreign keys)
+  edges <- data.frame(from = character(), to = character())
+  for(table in tables) {
+    fks <- dbGetQuery(db_conn, paste0("PRAGMA foreign_key_list(", table, ")"))
+    if(nrow(fks) > 0) {
+      for(i in 1:nrow(fks)) {
+        edges <- rbind(edges, data.frame(from = table, to = fks$table[i]))
+      }
+    }
+  }
+
+  visNetwork(nodes, edges, main = title, width = "100%", height = "400px") %>%
+    visEdges(arrows = "to", color = list(color = "#848484")) %>%
+    visOptions(highlightNearest = TRUE) %>%
+    visLayout(randomSeed = 42)
+}
+
+# Create E-COMMERCE database
+ecom_db <- dbConnect(SQLite(), ":memory:")
+invisible(dbExecute(ecom_db, "PRAGMA foreign_keys = ON"))
+invisible(dbExecute(ecom_db, "CREATE TABLE customers (customer_id INTEGER PRIMARY KEY, name TEXT, email TEXT)"))
+invisible(dbExecute(ecom_db, "CREATE TABLE products (product_id INTEGER PRIMARY KEY, name TEXT, price REAL)"))
+invisible(dbExecute(ecom_db, "CREATE TABLE orders (order_id INTEGER PRIMARY KEY, customer_id INTEGER,
+                    order_date TEXT, FOREIGN KEY(customer_id) REFERENCES customers(customer_id))"))
+invisible(dbExecute(ecom_db, "CREATE TABLE order_items (item_id INTEGER PRIMARY KEY, order_id INTEGER,
+                    product_id INTEGER, quantity INTEGER,
+                    FOREIGN KEY(order_id) REFERENCES orders(order_id),
+                    FOREIGN KEY(product_id) REFERENCES products(product_id))"))
+
+# Add sample data
+invisible(dbExecute(ecom_db, "INSERT INTO customers VALUES (1, 'Alice', 'alice@email.com'), (2, 'Bob', 'bob@email.com'), (3, 'Carol', 'carol@email.com')"))
+invisible(dbExecute(ecom_db, "INSERT INTO products VALUES (1, 'Laptop', 999.99), (2, 'Mouse', 29.99), (3, 'Keyboard', 79.99), (4, 'Monitor', 299.99)"))
+invisible(dbExecute(ecom_db, "INSERT INTO orders VALUES (1, 1, '2024-01-15'), (2, 2, '2024-01-16'), (3, 1, '2024-01-17')"))
+invisible(dbExecute(ecom_db, "INSERT INTO order_items VALUES (1, 1, 1, 1), (2, 1, 2, 2), (3, 2, 3, 1), (4, 3, 4, 1), (5, 3, 2, 1)"))
+
+# Create HEALTHCARE database (completely different schema)
+health_db <- dbConnect(SQLite(), ":memory:")
+invisible(dbExecute(health_db, "PRAGMA foreign_keys = ON"))
+invisible(dbExecute(health_db, "CREATE TABLE departments (dept_id INTEGER PRIMARY KEY, dept_name TEXT)"))
+invisible(dbExecute(health_db, "CREATE TABLE doctors (doctor_id INTEGER PRIMARY KEY, name TEXT, dept_id INTEGER,
+                     FOREIGN KEY(dept_id) REFERENCES departments(dept_id))"))
+invisible(dbExecute(health_db, "CREATE TABLE patients (patient_id INTEGER PRIMARY KEY, name TEXT, dob TEXT)"))
+invisible(dbExecute(health_db, "CREATE TABLE appointments (appt_id INTEGER PRIMARY KEY, patient_id INTEGER,
+                     doctor_id INTEGER, appt_date TEXT,
+                     FOREIGN KEY(patient_id) REFERENCES patients(patient_id),
+                     FOREIGN KEY(doctor_id) REFERENCES doctors(doctor_id))"))
+
+# Add sample data
+invisible(dbExecute(health_db, "INSERT INTO departments VALUES (1, 'Cardiology'), (2, 'Neurology'), (3, 'Pediatrics')"))
+invisible(dbExecute(health_db, "INSERT INTO doctors VALUES (1, 'Dr. Smith', 1), (2, 'Dr. Jones', 2), (3, 'Dr. Brown', 1), (4, 'Dr. Davis', 3)"))
+invisible(dbExecute(health_db, "INSERT INTO patients VALUES (1, 'John Doe', '1985-03-15'), (2, 'Jane Smith', '1990-07-22'), (3, 'Bob Wilson', '2015-12-10')"))
+invisible(dbExecute(health_db, "INSERT INTO appointments VALUES (1, 1, 1, '2024-02-01'), (2, 2, 2, '2024-02-02'), (3, 1, 3, '2024-02-03'), (4, 3, 4, '2024-02-04')"))
+
+# Display both visualizations
+browsable(
+  div(
+    visualize_db_schema(ecom_db, "E-Commerce Database Schema"),
+    tags$br(),
+    visualize_db_schema(health_db, "Healthcare Database Schema")
+  )
+)
+
+# Clean up
+invisible(dbDisconnect(ecom_db))
+invisible(dbDisconnect(health_db))
+```
+
+**Same function, two completely different database schemas - that's reusability!**
+
+## 7. Interface Paradigm
+
+**Definition:** How users specify visualizations
+
+::::: columns
+::: {.column width="50%"}
+### GUI (Graphical)
+
+**Examples:** Excel, Tableau, Power BI
+
+**Interaction:** - Drag and drop - Point and click - Visual feedback - WYSIWYG
+
+**Advantages:** - Immediate results - Visual exploration - No coding required
+
+**Disadvantages:** - Hard to reproduce - Difficult to version control - Manual repetition
+:::
+
+::: {.column width="50%"}
+### Declarative (Code/Markup)
+
+**Examples:** ggplot2, D3.js, Vega-Lite
+
+**Interaction:** - Write code/markup - Specify relationships - Describe outcome
+
+**Advantages:** - Reproducible - Version controllable - Automatable - Reusable
+
+**Disadvantages:** - Requires programming - Slower initial feedback - Steeper learning curve
+:::
+:::::
+
+## 8. Theoretical Foundation
+
+**Definition:** Based on formal visualization theories vs. pragmatic chart collections
+
+::::: columns
+::: {.column width="50%"}
+### Strong Theoretical Foundation
+
+**ggplot2**: Wilkinson's Grammar of Graphics - Data → Aesthetics → Geometries → Statistics → Coordinates → Facets
+
+**Vega-Lite**: Grammar of Interactive Graphics
+
+**Tableau**: VizQL (Visual Query Language)
+
+**Benefits:** - Consistent - Composable - Predictable - Extensible
+:::
+
+::: {.column width="50%"}
+### Pragmatic/Typological
+
+**Excel**: Collection of chart types
+
+**Matplotlib (basic)**: Individual plotting functions
+
+**Benefits:** - Faster for common cases - Less learning required
+
+<br>
+
+**Why it matters:**
+
+Grammars scale better to novel visualizations
+:::
+:::::
+
+## Grammar of Graphics: Overview [@wilkinson2005]
+
+![](https://github.com/QCBSRworkshops/workshop03/blob/main/pres-en/images/ggplot-grammar-of-graphics-stack-1.png?raw=true)
+
+## Grammar of Graphics: Data
+
+Graphics start with data
+
+```{r}
+#| echo: true
+# Load required libraries and data
+library(ggplot2)
+library(dplyr)
+library(openxlsx)
+
+# Load data from an Excel spreadsheet
+data <- read.xlsx("./healthcare cost data.xlsx")
+
+# Round percentage column
+data$`Patient.%.of.Cost` <- round(data$`Patient.%.of.Cost`, 1)
+```
+
+```{r}
+#| echo: false
+# View the data
+library(knitr)
+library(kableExtra)
+kable(head(data, 6), format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                font_size = 14,
+                full_width = FALSE) %>%
+  column_spec(1:ncol(data), width = "auto")
+```
+
+## Grammar of Graphics: Aesthetics
+
+**Aesthetics** are the visual properties of geometric objects that can represent data:
+
+-   **Position**: x, y (and z for 3D)
+-   **Color**: fill, stroke/outline color
+-   **Size**: point size, line width
+-   **Shape**: point shape, line type
+-   **Transparency**: alpha/opacity
+-   **Text**: labels, annotations
+
+Each aesthetic can be **mapped** to a variable in your data or **set** to a constant value.
+
+## Grammar of Graphics: Mapping
+
+How to map *data* onto *aesthetic* attributes of *geometric* objects
+
+```{r}
+#| echo: true
+#| results: hold
+ggplot(data, aes(x = Patient.Count, y = Total.Cost))
+```
+
+## Grammar of Graphics: Layers
+
+-   A graph is made of one or more layers
+-   Each layer has three parts:
+    -   *Geometry* determines *how* data are displayed (points, lines, etc.)
+    -   *Statistical transformations* affect *what* is displayed
+    -   *Position adjustment* controls how overlapping objects are arranged (stack, dodge, jitter, etc.)
+
+## Grammar of Graphics: Geometries
+
+**Geometries** (geoms) are the geometric objects that represent data:
+
+-   **Points** (`geom_point`) - scatter plots
+-   **Lines** (`geom_line`) - line graphs, trends
+-   **Bars** (`geom_bar`, `geom_col`) - bar charts
+-   **Areas** (`geom_area`) - filled areas under curves
+-   **Boxplots** (`geom_boxplot`) - distribution summaries
+-   **Text** (`geom_text`, `geom_label`) - annotations
+
+Multiple geometries can be **layered** on the same plot to create complex visualizations.
+
+## Grammar of Graphics: Geometries: Point {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_point()
+```
+
+## Grammar of Graphics: Geometries: Point, colored by Disease {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_point(aes(color = Disease))
+```
+
+## Grammar of Graphics: Geometries: Line, colored by Disease {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_line(aes(color = Disease))
+```
+
+## Grammar of Graphics: Geometries: Line + Point {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2-3"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_line(aes(color = Disease)) +
+  geom_point(aes(color = Disease))
+```
+
+## Grammar of Graphics: Scales {auto-animate="true"}
+
+Scales map data values to aesthetic values. Here we change the default color scale used for Disease
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "4"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_line(aes(color = Disease)) +
+  geom_point(aes(color = Disease)) +
+  scale_color_viridis_d()
+```
+
+## Grammar of Graphics: Facets {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2-3"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_line(aes(color = Disease)) +
+  facet_wrap(~ Disease)
+```
+
+## Grammar of Graphics: Facets (without color coding) {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2-4"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_line() +
+  facet_wrap(~ Disease)
+```
+
+## Grammar of Graphics: Statistics {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "2-4"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_point(aes(color=Disease)) +
+  geom_line(aes(color=Disease)) +
+  stat_summary(geom="line", fun="mean")
+```
+
+## Grammar of Graphics: Coordinates {auto-animate="true"}
+
+Coordinate systems control how data positions map to the plane of the graphic. Here, we zoom the graph on 0 to 17 year olds.
+
+```{r}
+#| echo: true
+#| results: hold
+#| code-line-numbers: "5"
+ggplot(data, aes(x = Age, y = Total.Cost)) +
+  geom_point(aes(color=Disease)) +
+  geom_line(aes(color=Disease)) +
+  stat_summary(geom="line", fun="mean") +
+  coord_cartesian(xlim = c(0, 17), ylim = c(0, 5E6))
+```
+
+**Common coordinate systems:** `coord_cartesian()` (default), `coord_flip()` (flip axes), `coord_polar()` (polar), `coord_trans()` (transformed scales)
+
+## 9. Dissemination/Collaboration
+
+**Definition:** Options for sharing and collaborating on visualizations
+
+| Dimension | Excel | Tableau | R/Python | D3.js/Web |
+|---------------|---------------|---------------|---------------|---------------|
+| **Sharing** | Email file | Tableau Server | HTML/PDF/Image | Web hosting |
+| **Collaboration** | Shared files | Tableau Cloud/Server | Git/GitHub | Git/GitHub |
+| **Publishing** | Limited | Tableau Public/Server/Cloud | Quarto/Shiny | Any web server |
+| **Interactivity** | Limited | Full (Server) | Shiny/Dash | Full |
+| **Version Control** | Poor | Limited | Excellent (Git) | Excellent (Git) |
+| **Reproducibility** | Poor | Medium | Excellent | Excellent |
+
+## 10. Cost
+
+**Definition:** Overall cost to use the tool and disseminate visualizations
+
+<div>
+
+**Free/Open Source** (Server costs for sharing visualizations)
+
+-   **R + ggplot2, Python, matplotlib/altair, D3.js, VEGA, VEGA-Lite**, etc.
+
+**Freemium (**Free with limits)
+
+-   **Tableau Desktop Public Edition** (limited to text-based data files and public web publication)
+
+-   **Google Sheets/Charts**
+
+**Commercial (rought cost estimate circa 2025)**
+
+-   **Tableau Desktop:** \~\$70/month per user
+
+-   **Power BI:** \~\$10-20/month per user
+
+-   **Excel:** Part of Microsoft 365 (\~\$6-20/month)
+
+-   **Cost:** Licensing + potential server costs
+
+**Hidden costs:** Training, development cost, maintenance, switching costs
+
+</div>
+
+## Dimension Trade-offs: Putting It All Together
+
+No tool excels on all dimensions. Common trade-off patterns:
+
+::: incremental
+**High Ease of Use ↔ High Expressiveness** - Excel (easy) vs. D3.js (expressive)
+
+**GUI Interface ↔ High Reusability** - Tableau (GUI) vs. ggplot2 (reusable)
+
+**Low Cost ↔ High Ease of Use** - Free tools have steeper learning curves
+
+**High Abstraction ↔ High Expressiveness** - More automation = less control
+
+**Strong Theory ↔ Ease of Use (short-term)** - Grammars take longer to learn but scale better
+:::
 
 ## Tool Selection Framework
 
-**Use this 8-dimensional framework to:**
+**Use this 10-dimensional framework to:**
 
 1.  **Identify requirements** across all dimensions
 2.  **Avoid single-dimension thinking** (not just ease vs. expressiveness)
@@ -323,8 +1565,8 @@ svg.selectAll("circle")
 ## Conclusion
 
 -   **Jeffrey Heer's taxonomy** provided crucial foundation
--   **8-dimensional framework** captures modern tool complexity
--   **Declarative systems** offer unique advantages in reusability and theoretical rigor
+-   **10-dimensional framework** captures modern tool complexity
+-   **Declarative systems** offer unique advantages in reusability, reproducibility, etc.
 -   **No single tool** excels across all dimensions
 -   **Informed tool selection** requires understanding all trade-offs
 
@@ -339,5 +1581,5 @@ svg.selectAll("circle")
 
 ------------------------------------------------------------------------
 
-**References:** - Heer, J. & Shneiderman, B. (2012). Interactive dynamics for visual analysis - Wilkinson, L. (2005). The Grammar of Graphics\
-- Wickham, H. (2010). A layered grammar of graphics - Satyanarayan, A. et al. (2017). Vega-Lite: A grammar of interactive graphics
+**References:** 
+

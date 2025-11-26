@@ -1,0 +1,87 @@
+/* Custom styles for Taxonomy of Visualization Tools presentation */
+
+/* Reduce base font size for better content density */
+.reveal {
+  font-size: 28px;
+}
+
+/* Adjust heading sizes */
+.reveal h2 {
+  font-size: 1.8em;
+  margin-bottom: 0.5em;
+}
+
+.reveal h3 {
+  font-size: 1.3em;
+  margin-bottom: 0.4em;
+  margin-top: 0.4em;
+}
+
+/* Reduce line height for better density */
+.reveal p {
+  line-height: 1.3;
+  margin-bottom: 0.5em;
+}
+
+/* Make lists more compact */
+.reveal ul, .reveal ol {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
+.reveal li {
+  margin-bottom: 0.3em;
+  line-height: 1.3;
+}
+
+/* Nested list items even more compact */
+.reveal li li {
+  margin-bottom: 0.2em;
+  font-size: 0.95em;
+}
+
+/* Code blocks smaller */
+.reveal pre {
+  font-size: 0.65em;
+  line-height: 1.3;
+  margin: 0.5em 0;
+}
+
+.reveal code {
+  font-size: 0.85em;
+}
+
+/* Inline code */
+.reveal p code, .reveal li code {
+  font-size: 0.9em;
+}
+
+/* Column content adjustments */
+.reveal .columns {
+  margin-top: 0.5em;
+}
+
+/* Make strong/bold text not too heavy */
+.reveal strong {
+  font-weight: 600;
+}
+
+/* Adjust spacing for incremental lists */
+.reveal .incremental li {
+  margin-bottom: 0.4em;
+}
+
+/* Reduce spacing in ordered lists */
+.reveal ol {
+  margin-left: 1.2em;
+}
+
+/* Tighter spacing for nested content in lists */
+.reveal li > ul, .reveal li > ol {
+  margin-top: 0.2em;
+}
+
+/* Force hide all tooltip elements at bottom of slides */
+div[style*="position: absolute"][style*="bottom: 0"] {
+  display: none !important;
+}
