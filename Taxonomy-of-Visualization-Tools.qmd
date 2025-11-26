@@ -1,7 +1,12 @@
 ---
 title: "A Taxonomy of Visualization Tools"
 subtitle: "A Framework for Understanding Visualization Tools"
-author: "Todd R Johnson"
+author: 
+  - name: "Todd R Johnson"
+    email: "todd.r.johnson@uth.tmc.edu"
+affiliation: UTHealth McWilliams School of Biomedical Informatics
+date: 2025-11-26
+date-modified: last-modified
 format:
   revealjs:
     theme: default
@@ -66,9 +71,8 @@ ggplot(q4_data, aes(x = Month, y = Sales)) +
 
 ## User Interface: The Real Impact
 
-**Scenario:** Your company has 50 regional offices
+**Scenario:** Your company has 50 regional offices, with their own databases
 
-::: incremental
 -   **GUI approach**: Manually create 50 separate charts (hours of repetitive work)
     -   Any design change? Redo all 50 charts manually
     -   Quality control? Manually verify each one
@@ -76,7 +80,6 @@ ggplot(q4_data, aes(x = Month, y = Sales)) +
     -   Design change? Update code once, regenerate all 50
     -   Quality control? Automated and consistent
 -   **The trade-off**: Short-term ease of use vs. long-term scalability
-:::
 
 ## Example 2: Expressiveness
 

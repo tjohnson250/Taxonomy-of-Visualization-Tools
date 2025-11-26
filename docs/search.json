@@ -1089,7 +1089,7 @@
     "href": "Taxonomy-of-Visualization-Tools.html#user-interface-the-real-impact",
     "title": "A Taxonomy of Visualization Tools",
     "section": "User Interface: The Real Impact",
-    "text": "User Interface: The Real Impact\nScenario: Your company has 50 regional offices\n\nGUI approach: Manually create 50 separate charts (hours of repetitive work)\n\nAny design change? Redo all 50 charts manually\nQuality control? Manually verify each one\n\nDeclarative approach: Run the same code on 50 datasets (minutes)\n\nDesign change? Update code once, regenerate all 50\nQuality control? Automated and consistent\n\nThe trade-off: Short-term ease of use vs. long-term scalability"
+    "text": "User Interface: The Real Impact\nScenario: Your company has 50 regional offices, with their own databases\n\nGUI approach: Manually create 50 separate charts (hours of repetitive work)\n\nAny design change? Redo all 50 charts manually\nQuality control? Manually verify each one\n\nDeclarative approach: Run the same code on 50 datasets (minutes)\n\nDesign change? Update code once, regenerate all 50\nQuality control? Automated and consistent\n\nThe trade-off: Short-term ease of use vs. long-term scalability"
   },
   {
     "objectID": "Taxonomy-of-Visualization-Tools.html#example-2-expressiveness",
