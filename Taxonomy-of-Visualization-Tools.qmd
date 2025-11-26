@@ -658,7 +658,9 @@ vd = import("vega_datasets")
 
 ## 4. Interaction Capabilities: D3.js Example
 
-**Brush selection with cross-filtering:**
+**Brush selection with cross-filtering.**
+
+**Try it:** Drag to select points on the scatter plot and watch the bar chart update!
 
 ```{=html}
 <div style="display: flex; gap: 20px;">
@@ -968,6 +970,8 @@ function updateBars(filteredData) {
 
 ## 4. Live Vega-Lite Interaction
 
+**Try it:** Drag to select points on the scatter plot and watch the bar chart update!
+
 ```{python}
 #| echo: false
 #| fig-width: 10
@@ -1009,8 +1013,6 @@ bars = alt.Chart(cars).mark_bar().encode(
 # Combine side-by-side
 scatter | bars
 ```
-
-**Try it:** Drag to select points on the scatter plot and watch the bar chart update!
 
 ## 4. Interaction Capabilities: Vega-Lite Example
 

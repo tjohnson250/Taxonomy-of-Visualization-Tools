@@ -1236,7 +1236,7 @@
     "href": "Taxonomy-of-Visualization-Tools.html#interaction-capabilities-d3.js-example",
     "title": "A Taxonomy of Visualization Tools",
     "section": "4. Interaction Capabilities: D3.js Example",
-    "text": "4. Interaction Capabilities: D3.js Example\nBrush selection with cross-filtering:\n\n  \n  \n\n\n\nRequires ~100+ lines of custom JavaScript for brush handling, filtering, and coordinated updates.\nThis took multiple rounds of prompting in Claude Code plus debugging in the Chrome console to get right. Estimated time: ~ 30 minutes.\nMost visualization packages lack appropriate interaction abstractions making them hard for humans and AI to use."
+    "text": "4. Interaction Capabilities: D3.js Example\nBrush selection with cross-filtering.\nTry it: Drag to select points on the scatter plot and watch the bar chart update!\n\n  \n  \n\n\n\nRequires ~100+ lines of custom JavaScript for brush handling, filtering, and coordinated updates.\nThis took multiple rounds of prompting in Claude Code plus debugging in the Chrome console to get right. Estimated time: ~ 30 minutes.\nMost visualization packages lack appropriate interaction abstractions making them hard for humans and AI to use."
   },
   {
     "objectID": "Taxonomy-of-Visualization-Tools.html#interaction-capabilities-d3.js-code",
@@ -1257,7 +1257,7 @@
     "href": "Taxonomy-of-Visualization-Tools.html#live-vega-lite-interaction",
     "title": "A Taxonomy of Visualization Tools",
     "section": "4. Live Vega-Lite Interaction",
-    "text": "4. Live Vega-Lite Interaction\n\n\n\n\n\n  \n  \n  \n  \n  \n\n\n  \n  \n\n\n\n\nTry it: Drag to select points on the scatter plot and watch the bar chart update!"
+    "text": "4. Live Vega-Lite Interaction\nTry it: Drag to select points on the scatter plot and watch the bar chart update!"
   },
   {
     "objectID": "Taxonomy-of-Visualization-Tools.html#interaction-capabilities-vega-lite-example",
